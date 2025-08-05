@@ -2,15 +2,16 @@ import { useAnimations, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useRef, useState } from "react";
 import CanvasLoader from "./Loader";
-import spacemanScene from "../assets/Highlight.glb";
+import highlightScene from "../assets/Highlight.glb";
+import backgroundScene from "../assets/Background.glb";
 
 const Spaceman = ({ scale, position, rotationX, rotationY, ...props }) => {
   const spacemanRef = useRef();
-  const { scene, animations } = useGLTF(spacemanScene);
+  const { scene, animations } = useGLTF(highlightScene);
   const { actions } = useAnimations(animations, spacemanRef);
 
   useEffect(() => {
-    if (actions["Idle"]) {
+    if (actions && actions["Idle"]) {
       actions["Idle"].play();
     }
   }, [actions]);
@@ -20,7 +21,7 @@ const Spaceman = ({ scale, position, rotationX, rotationY, ...props }) => {
       ref={spacemanRef}
       position={position}
       scale={scale}
-      rotation={[-0.3, 0, 3]}
+      rotation={[rotationX, rotationY, 0]}
       {...props}
     >
       <primitive object={scene} />
@@ -28,11 +29,16 @@ const Spaceman = ({ scale, position, rotationX, rotationY, ...props }) => {
   );
 };
 
+const Background = () => {
+  const { scene } = useGLTF(backgroundScene);
+  return <primitive object={scene} />;
+};
+
 const SpacemanCanvas = ({ scrollY }) => {
   const [rotationX, setRotationX] = useState(0);
   const [rotationY, setRotationY] = useState(0);
-  const [scale, setScale] = useState([2, 2, 2]);
-  const [position, setPosition] = useState([0.2, -0.7, 0]);
+  const [scale, setScale] = useState([3, 3, 3]); // Made bigger
+  const [position, setPosition] = useState([0, -1, 0]); // Moved closer to center
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,20 +51,20 @@ const SpacemanCanvas = ({ scrollY }) => {
 
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setScale([1, 1, 1]);
-        setPosition([0.2, -0.1, 0]);
-      } else if (window.innerWidth < 1024) {
-        setScale([1.33, 1.33, 1.33]);
-        setPosition([0.2, -0.3, 0]);
-      } else if (window.innerWidth < 1280) {
         setScale([1.5, 1.5, 1.5]);
-        setPosition([0.2, -0.4, 0]);
-      } else if (window.innerWidth < 1536) {
-        setScale([1.66, 1.66, 1.66]);
-        setPosition([0.2, -0.5, 0]);
-      } else {
+        setPosition([0, -0.5, 0]);
+      } else if (window.innerWidth < 1024) {
         setScale([2, 2, 2]);
-        setPosition([0.2, -0.7, 0]);
+        setPosition([0, -0.7, 0]);
+      } else if (window.innerWidth < 1280) {
+        setScale([2.5, 2.5, 2.5]);
+        setPosition([0, -0.8, 0]);
+      } else if (window.innerWidth < 1536) {
+        setScale([3, 3, 3]);
+        setPosition([0, -0.9, 0]);
+      } else {
+        setScale([3.5, 3.5, 3.5]);
+        setPosition([0, -1, 0]);
       }
     };
 
@@ -93,6 +99,10 @@ const SpacemanCanvas = ({ scrollY }) => {
           intensity={1}
         />
 
+        {/* Background Model */}
+        <Background />
+
+        {/* Highlight Model (Spaceman) */}
         <Spaceman
           rotationX={rotationX}
           rotationY={rotationY}
@@ -103,5 +113,9 @@ const SpacemanCanvas = ({ scrollY }) => {
     </Canvas>
   );
 };
+
+// Preload both models
+useGLTF.preload(highlightScene);
+useGLTF.preload(backgroundScene);
 
 export default SpacemanCanvas;
