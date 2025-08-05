@@ -10,9 +10,22 @@ const Spaceman = ({ scale, position, rotationX, rotationY, ...props }) => {
   const { scene, animations } = useGLTF(highlightScene);
   const { actions } = useAnimations(animations, group);
 
-  const SPACEMAN_BASE_ROTATION_X = 0; // Tilt up/down (try: 0.3 to tilt toward camera)
-  const SPACEMAN_BASE_ROTATION_Y = 2; // Turn left/right (try: 0 for straight, 3.14 for backward)
-  const SPACEMAN_BASE_ROTATION_Z = 0; // Roll left/right (try: 0 for upright)
+  const SPACEMAN_BASE_ROTATION_X = 0;
+  const SPACEMAN_BASE_ROTATION_Y = 2;
+  const SPACEMAN_BASE_ROTATION_Z = 0;
+  const SPACEMAN_TROPHY_SPIN = 0.5; // Trophy spin speed
+
+  // Continuous spinning
+  useFrame((state) => {
+    if (group.current) {
+      const trophySpin = state.clock.elapsedTime * SPACEMAN_TROPHY_SPIN;
+      group.current.rotation.set(
+        rotationX + SPACEMAN_BASE_ROTATION_X,
+        rotationY + SPACEMAN_BASE_ROTATION_Y + trophySpin,
+        SPACEMAN_BASE_ROTATION_Z
+      );
+    }
+  });
 
   useEffect(() => {
     if (actions && actions["Idle"]) {
@@ -23,16 +36,7 @@ const Spaceman = ({ scale, position, rotationX, rotationY, ...props }) => {
   }, [actions, animations]);
 
   return (
-    <group
-      ref={group}
-      position={position}
-      scale={scale}
-      rotation={[
-        rotationX + SPACEMAN_BASE_ROTATION_X,
-        rotationY + SPACEMAN_BASE_ROTATION_Y,
-        SPACEMAN_BASE_ROTATION_Z,
-      ]}
-    >
+    <group ref={group} position={position} scale={scale}>
       <primitive object={scene} />
     </group>
   );
@@ -107,6 +111,8 @@ const SpacemanCanvas = ({ scrollY }) => {
   const SPACEMAN_Y_1536 = 1; // Higher starting position on laptops
   const SPACEMAN_Y_DESKTOP = 1; // Higher starting position on desktops
 
+  const SPACEMAN_X_POSITION = 5;
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -125,35 +131,35 @@ const SpacemanCanvas = ({ scrollY }) => {
           1.5 * SPACEMAN_SIZE_768,
           1.5 * SPACEMAN_SIZE_768,
         ]);
-        setPosition([0, SPACEMAN_Y_768 - fallAmount, 0]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_768 - fallAmount, 0]);
       } else if (window.innerWidth < 1024) {
         setScale([
           2 * SPACEMAN_SIZE_1024,
           2 * SPACEMAN_SIZE_1024,
           2 * SPACEMAN_SIZE_1024,
         ]);
-        setPosition([0, SPACEMAN_Y_1024 - fallAmount, 0]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_1024 - fallAmount, 0]);
       } else if (window.innerWidth < 1280) {
         setScale([
           2.5 * SPACEMAN_SIZE_1280,
           2.5 * SPACEMAN_SIZE_1280,
           2.5 * SPACEMAN_SIZE_1280,
         ]);
-        setPosition([0, SPACEMAN_Y_1280 - fallAmount, 0]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_1280 - fallAmount, 0]);
       } else if (window.innerWidth < 1536) {
         setScale([
           2.5 * SPACEMAN_SIZE_1536,
           2.5 * SPACEMAN_SIZE_1536,
           2.5 * SPACEMAN_SIZE_1536,
         ]);
-        setPosition([0, SPACEMAN_Y_1536 - fallAmount, 0]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_1536 - fallAmount, 0]);
       } else {
         setScale([
           2.5 * SPACEMAN_SIZE_DESKTOP,
           2.5 * SPACEMAN_SIZE_DESKTOP,
           2.5 * SPACEMAN_SIZE_DESKTOP,
         ]);
-        setPosition([0, SPACEMAN_Y_DESKTOP - fallAmount, -3]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_DESKTOP - fallAmount, -3]);
       }
     };
 
@@ -167,35 +173,35 @@ const SpacemanCanvas = ({ scrollY }) => {
           1.5 * SPACEMAN_SIZE_768,
           1.5 * SPACEMAN_SIZE_768,
         ]);
-        setPosition([0, SPACEMAN_Y_768 - fallAmount, 0]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_768 - fallAmount, 0]);
       } else if (window.innerWidth < 1024) {
         setScale([
           2 * SPACEMAN_SIZE_1024,
           2 * SPACEMAN_SIZE_1024,
           2 * SPACEMAN_SIZE_1024,
         ]);
-        setPosition([0, SPACEMAN_Y_1024 - fallAmount, 0]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_1024 - fallAmount, 0]);
       } else if (window.innerWidth < 1280) {
         setScale([
           2.5 * SPACEMAN_SIZE_1280,
           2.5 * SPACEMAN_SIZE_1280,
           2.5 * SPACEMAN_SIZE_1280,
         ]);
-        setPosition([0, SPACEMAN_Y_1280 - fallAmount, 0]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_1280 - fallAmount, 0]);
       } else if (window.innerWidth < 1536) {
         setScale([
           2.5 * SPACEMAN_SIZE_1536,
           2.5 * SPACEMAN_SIZE_1536,
           2.5 * SPACEMAN_SIZE_1536,
         ]);
-        setPosition([0, SPACEMAN_Y_1536 - fallAmount, 0]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_1536 - fallAmount, 0]);
       } else {
         setScale([
           2.5 * SPACEMAN_SIZE_DESKTOP,
           2.5 * SPACEMAN_SIZE_DESKTOP,
           2.5 * SPACEMAN_SIZE_DESKTOP,
         ]);
-        setPosition([0, SPACEMAN_Y_DESKTOP - fallAmount, -3]);
+        setPosition([SPACEMAN_X_POSITION, SPACEMAN_Y_DESKTOP - fallAmount, -3]);
       }
     };
 

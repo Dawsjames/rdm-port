@@ -30,12 +30,12 @@ const Hero = () => {
 
         <div>
           <motion.h1
-            className="font-black text-white lg:text-[80px] sm:text-[60px] xs:text-[50px] text-[40px] lg:leading-[98px] mt-2"
+            className="font-black streaky-glow lg:text-[80px] sm:text-[60px] xs:text-[50px] text-[40px] lg:leading-[98px] mt-2"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            Hi, I'm <span className="text-[#915EFF]">Your Name</span>
+            Hi, I'm <span className="text-[#915EFF]">Dawson James</span>
           </motion.h1>
 
           <motion.p
