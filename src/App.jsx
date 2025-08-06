@@ -2,7 +2,10 @@ import { BrowserRouter } from "react-router-dom";
 import { Hero, GalaxyModel } from "./components";
 import SpacemanModel from "./components/SpacemanModel";
 import { About } from "./pages/About";
+import { Experience } from "./pages/Experience";
 import { useState, useEffect } from "react";
+import { Contact } from "./pages/Contact";
+import { Projects } from "./pages/Projects";
 
 const App = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -102,13 +105,24 @@ const App = () => {
           Content section with galaxy visible in background (dimmed)
           Z-index: 30 (content layer)
           Background: semi-transparent to show galaxy behind
-          FIXED: Added isolation for proper button interactions
+          Added pointer-events: auto to ensure clickable elements work
         */}
         <div
           className="relative z-30 bg-primary/80 backdrop-blur-sm"
-          style={{ isolation: "isolate" }}
+          style={{
+            isolation: "isolate",
+            pointerEvents: "auto", // Ensure buttons are clickable
+          }}
         >
           <About />
+        </div>
+
+        {/* EXPERIENCE SECTION */}
+        <div
+          className="relative z-30 bg-primary/80 backdrop-blur-sm"
+          style={{ isolation: "isolate", pointerEvents: "auto" }}
+        >
+          <Experience />
         </div>
 
         {/* PORTFOLIO SECTION - Placeholder */}
@@ -117,16 +131,11 @@ const App = () => {
           Z-index: 30 (same as other content sections)
           Background: semi-transparent for galaxy visibility
         */}
-        <div className="relative z-30 min-h-screen bg-primary/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-white text-4xl font-bold mb-4">
-              Portfolio Section
-            </h2>
-            <p className="text-[#aaa6c3] max-w-2xl mx-auto">
-              Your projects will be displayed here with the beautiful galaxy
-              background creating an immersive space theme.
-            </p>
-          </div>
+        <div
+          className="relative z-30 bg-primary/80 backdrop-blur-sm"
+          style={{ isolation: "isolate", pointerEvents: "auto" }}
+        >
+          <Projects />
         </div>
 
         {/* CONTACT SECTION - Placeholder */}
@@ -135,16 +144,11 @@ const App = () => {
           Z-index: 30 (same as other content sections)
           Background: semi-transparent for galaxy visibility
         */}
-        <div className="relative z-30 min-h-screen bg-primary/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-white text-4xl font-bold mb-6">
-              Contact Section
-            </h2>
-            <p className="text-[#aaa6c3] max-w-2xl mx-auto">
-              Contact information and forms will be here, maintaining the cosmic
-              atmosphere with the galaxy backdrop.
-            </p>
-          </div>
+        <div
+          className="relative z-30 bg-primary/80 backdrop-blur-sm"
+          style={{ isolation: "isolate", pointerEvents: "auto" }}
+        >
+          <Contact />
         </div>
       </div>
     </BrowserRouter>

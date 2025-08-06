@@ -9,11 +9,11 @@ import highlightScene from "../assets/Highlight.glb";
 // ============================================================
 
 // POSITIONING & MOVEMENT VARIABLES
-const SPACEMAN_BASE_POSITION = [6, -2, -2]; // [x, y, z] - Starting position relative to screen center
+const SPACEMAN_BASE_POSITION = [7, -2, -2]; // [x, y, z] - Starting position relative to screen center
 const SCROLL_MOVEMENT_SPEED = 0.0009; // How fast spaceman moves with scroll (lower = slower)
 const VERTICAL_FALL_SPEED = 0.0004; // How fast spaceman "falls" downward through sections
 const HORIZONTAL_DRIFT_SPEED = 0.001; // Side-to-side floating movement
-const ORBITAL_RADIUS = 2; // Distance from center for orbital movement
+const ORBITAL_RADIUS = -1; // Distance from center for orbital movement
 const ORBITAL_SPEED = 0.2; // Speed of orbital rotation (connected to scroll)
 
 // SCALE & SIZE VARIABLES
@@ -115,19 +115,19 @@ const SpacemanModel = ({
 
   return (
     <div
-      className="fixed top-0 left-0 w-full h-screen z-50"
+      className="fixed top-0 left-0 w-full h-screen"
       style={{
         background: "transparent",
         pointerEvents: "none",
         userSelect: "none",
         touchAction: "none",
+        zIndex: 40, // Always on top of sections (which are z-30)
         WebkitUserSelect: "none",
         MozUserSelect: "none",
         msUserSelect: "none",
         WebkitTouchCallout: "none",
         WebkitTapHighlightColor: "transparent",
-        // Enhanced isolation for About section
-        opacity: isInAboutSection ? 0.2 : 1,
+        opacity: isInAboutSection ? 0.5 : 1, // Slightly more visible in About section
         transition: "opacity 0.3s ease-in-out",
         // CSS isolation to prevent event capture
         isolation: "isolate",
@@ -137,6 +137,7 @@ const SpacemanModel = ({
     >
       <Canvas
         className="w-full h-full bg-transparent"
+        style={{ pointerEvents: "none" }}
         camera={{
           position: [0, CAMERA_HEIGHT_OFFSET, CAMERA_DISTANCE],
           fov: CAMERA_FOV,
@@ -155,44 +156,23 @@ const SpacemanModel = ({
           canvas.style.webkitTouchCallout = "none";
           canvas.style.webkitTapHighlightColor = "transparent";
 
-          // Additional safety for About section
-          if (isInAboutSection) {
-            canvas.style.visibility = "hidden";
-            canvas.style.zIndex = "-1";
-            canvas.style.position = "absolute";
-            canvas.style.top = "-9999px";
-            canvas.style.left = "-9999px";
-          } else {
-            canvas.style.visibility = "visible";
-            canvas.style.zIndex = "auto";
-            canvas.style.position = "static";
-            canvas.style.top = "auto";
-            canvas.style.left = "auto";
-          }
+          // Keep canvas visible but non-interactive in all sections
+          canvas.style.visibility = "visible";
+          canvas.style.zIndex = "40";
+          canvas.style.position = "static";
+          canvas.style.top = "auto";
+          canvas.style.left = "auto";
 
           // Prevent any context menu
           canvas.addEventListener("contextmenu", (e) => e.preventDefault());
 
-          // Block all mouse events
-          [
-            "mousedown",
-            "mouseup",
-            "mousemove",
-            "click",
-            "dblclick",
-            "wheel",
-            "touchstart",
-            "touchmove",
-            "touchend",
-          ].forEach((event) => {
-            canvas.addEventListener(
-              event,
-              (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-              },
-              { capture: true, passive: false }
-            );
+          // Completely disable all event capturing on the canvas
+          canvas.style.pointerEvents = "none";
+          canvas.style.touchAction = "none";
+
+          // Only prevent context menu
+          canvas.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
           });
         }}
       >

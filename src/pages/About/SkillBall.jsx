@@ -14,7 +14,7 @@ import vuejsSvg from "../../assets/logos/vuedotjs.svg";
 import postgresqlSvg from "../../assets/logos/postgresql.svg";
 
 // ============================================================
-// 🎯 SKILL BALL CONFIGURATION VARIABLES - EASILY EDITABLE!
+// 🎯 SKILL BALL CONFIGURATION VARIABLES - SCROLL INDEPENDENT!
 // ============================================================
 
 // ICON SIZE SETTINGS
@@ -34,7 +34,7 @@ const HOVER_GLOW_OUTER = 2; // px - Main glow radius (hover state)
 const HOVER_GLOW_MEDIUM = 2; // px - Medium glow radius (hover state)
 const HOVER_GLOW_INNER = 2; // px - Inner glow radius (hover state)
 
-// ANIMATION SETTINGS - SCROLL INDEPENDENT!
+// ANIMATION SETTINGS - TIME BASED ONLY, NO SCROLL!
 const SPIN_SPEED_X = 0.002; // Constant X-axis rotation speed
 const SPIN_SPEED_Y = 0.0025; // Constant Y-axis rotation speed
 const SPIN_SPEED_Z = 0.001; // Constant Z-axis rotation speed
@@ -96,16 +96,16 @@ const Skills = () => {
   const groupRef = useRef();
   const iconRefs = useRef([]);
 
-  // FIXED: Completely independent animation - NO scroll dependency!
+  // FIXED: Pure time-based animation - NO scroll dependency!
   useFrame((state) => {
     if (groupRef.current) {
-      // Pure constant spinning - independent of any external scroll
+      // Constant spinning based purely on elapsed time
       groupRef.current.rotation.x += SPIN_SPEED_X;
       groupRef.current.rotation.y += SPIN_SPEED_Y;
       groupRef.current.rotation.z += SPIN_SPEED_Z;
     }
 
-    // Individual icon pulsing animations - also independent
+    // Individual icon pulsing animations - also time-based only
     iconRefs.current.forEach((iconRef, i) => {
       if (iconRef) {
         const time = state.clock.elapsedTime;
@@ -126,12 +126,8 @@ const Skills = () => {
           enablePan={false}
           enableZoom={false}
           enableRotate={true}
-          // FIXED: Prevent orbit controls from interfering with page scroll
-          domElement={undefined}
-          // FIXED: Disable automatic scroll handling
+          // Disable any scroll-related controls
           enableDamping={false}
-          // FIXED: Prevent any scroll event capture
-          listenToKeyEvents={undefined}
           makeDefault={false}
         />
       )}
@@ -144,11 +140,11 @@ const Skills = () => {
         ref={groupRef}
         position={[0, 0, 0]}
         scale={OVERALL_SCALE}
-        // FIXED: Prevent any pointer event propagation
-        onPointerDown={(e) => e.stopPropagation()}
-        onPointerUp={(e) => e.stopPropagation()}
-        onPointerMove={(e) => e.stopPropagation()}
-        onWheel={(e) => e.stopPropagation()}
+        // Prevent any scroll event propagation
+        onWheel={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
       >
         {skills.map((skill, i) => {
           const position = [
@@ -171,12 +167,10 @@ const Skills = () => {
                 justifyContent: "center",
                 background: "transparent",
                 cursor: "pointer",
-                // FIXED: Prevent scroll event propagation
-                pointerEvents: "auto",
                 userSelect: "none",
-                touchAction: "none",
+                pointerEvents: "auto",
               }}
-              // FIXED: Isolated hover effects that don't interfere with page
+              // Hover effects only - no scroll interaction
               onPointerEnter={(e) => {
                 e.stopPropagation();
                 const img = e.currentTarget.querySelector("img");
@@ -226,7 +220,6 @@ const Skills = () => {
                   console.warn(`Failed to load ${skill.name} SVG:`, skill.svg);
                   e.target.style.display = "none";
                 }}
-                // FIXED: Prevent any drag/context menu interference
                 onDragStart={(e) => e.preventDefault()}
                 onContextMenu={(e) => e.preventDefault()}
               />
