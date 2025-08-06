@@ -1,5 +1,5 @@
 import Hero from "./Hero";
-import HighlightModel from "./HighlightModel";
+import GalaxyModel from "./GalaxyModel";
 import CanvasLoader from "./Loader";
 
-export { Hero, HighlightModel, CanvasLoader };
+export { Hero, GalaxyModel, CanvasLoader };

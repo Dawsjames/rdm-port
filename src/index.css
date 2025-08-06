@@ -200,3 +200,48 @@
       -2.6em 0em 0 0em rgba(255, 255, 255, 0.7), -1.8em -1.8em 0 0em #ffffff;
   }
 }
+.streaky-glow {
+  text-shadow: 0 0 5px #915eff, 0 0 10px #915eff, 0 0 20px #915eff,
+    0 0 40px #915eff, 0 0 80px #915eff;
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  from {
+    text-shadow: 0 0 5px #915eff, 0 0 10px #915eff, 0 0 20px #915eff,
+      0 0 40px #915eff, 0 0 80px #915eff;
+  }
+  to {
+    text-shadow: 0 0 2px #915eff, 0 0 5px #915eff, 0 0 10px #915eff,
+      0 0 20px #915eff, 0 0 40px #915eff;
+  }
+}
+
+/* Additional space-themed styles */
+.space-bg {
+  background: linear-gradient(135deg, #050816 0%, #151030 50%, #050816 100%);
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+}
+
+/* Improved z-index utilities */
+.z-background {
+  z-index: -10;
+}
+
+.z-content {
+  z-index: 10;
+}
+
+.z-foreground {
+  z-index: 20;
+}
+
+.z-overlay {
+  z-index: 30;
+}

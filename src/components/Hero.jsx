@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import HighlightModel from "./HighlightModel";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -16,12 +15,7 @@ const Hero = () => {
 
   return (
     <section className="relative w-full h-screen mx-auto">
-      {/* Background 3D Canvas */}
-      <div className="absolute inset-0 z-0">
-        <HighlightModel scrollY={scrollY} />
-      </div>
-
-      {/* Hero Content */}
+      {/* Hero Content - FIXED: Removed duplicate 3D canvas */}
       <div className="absolute inset-0 top-[120px] max-w-7xl mx-auto px-6 flex flex-row items-start gap-5 z-10">
         <div className="flex flex-col justify-center items-center mt-5">
           <div className="w-5 h-5 rounded-full bg-[#915EFF]" />
@@ -30,7 +24,7 @@ const Hero = () => {
 
         <div>
           <motion.h1
-            className="font-black streaky-glow lg:text-[80px] sm:text-[60px] xs:text-[50px] text-[40px] lg:leading-[98px] mt-2"
+            className="font-black text-white lg:text-[80px] sm:text-[60px] xs:text-[50px] text-[40px] lg:leading-[98px] mt-2"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
