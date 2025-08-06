@@ -3,7 +3,6 @@ import { OrbitControls, Html } from "@react-three/drei";
 import { useRef } from "react";
 import { useIsMobile } from "../../hooks";
 
-// Import SVG files as URLs (this is the correct way for Vite)
 import reactSvg from "../../assets/logos/react.svg";
 import javascriptSvg from "../../assets/logos/javascript.svg";
 import html5Svg from "../../assets/logos/html5.svg";
@@ -14,51 +13,50 @@ import firebaseSvg from "../../assets/logos/firebase.svg";
 import vuejsSvg from "../../assets/logos/vuedotjs.svg";
 import postgresqlSvg from "../../assets/logos/postgresql.svg";
 
+// ============================================================
+// 🎯 SKILL BALL CONFIGURATION VARIABLES - EASILY EDITABLE!
+// ============================================================
+
+// ICON SIZE SETTINGS
+const ICON_WIDTH = 100; // px - Individual icon width
+const ICON_HEIGHT = 100; // px - Individual icon height
+const CONTAINER_SIZE = 200; // px - Container size around icon
+
+// OVERALL SCALE & POSITIONING
+const OVERALL_SCALE = 1.2; // Overall size multiplier for entire skill ball
+const DISTANCE_FACTOR = 6; // Lower = bigger icons, Higher = smaller icons
+const POSITION_SPREAD = 7; // How spread out the icons are in 3D space
+
+// GLOW EFFECTS
+const NORMAL_GLOW_OUTER = 2; // px - Main glow radius (normal state)
+const NORMAL_GLOW_INNER = 2; // px - Inner glow radius (normal state)
+const HOVER_GLOW_OUTER = 2; // px - Main glow radius (hover state)
+const HOVER_GLOW_MEDIUM = 2; // px - Medium glow radius (hover state)
+const HOVER_GLOW_INNER = 2; // px - Inner glow radius (hover state)
+
+// ANIMATION SETTINGS - SCROLL INDEPENDENT!
+const SPIN_SPEED_X = 0.002; // Constant X-axis rotation speed
+const SPIN_SPEED_Y = 0.0025; // Constant Y-axis rotation speed
+const SPIN_SPEED_Z = 0.001; // Constant Z-axis rotation speed
+const PULSE_SCALE_MIN = 0.75; // Minimum scale during pulse
+const PULSE_SCALE_MAX = 1.25; // Maximum scale during pulse
+const PULSE_SPEED_BASE = 1; // Base pulse speed
+const PULSE_SPEED_VARIATION = 0.2; // How much pulse speed varies between icons
+
+// HOVER EFFECTS
+const HOVER_SCALE = 1.4; // How big icons get on hover
+
+// ============================================================
+
 const Skills = () => {
   const { isMobile } = useIsMobile();
 
-  // 🎯 EASILY EDITABLE VARIABLES - CHANGE THESE TO CUSTOMIZE!
-  // ============================================================
-
-  // Icon Size Settings
-  const ICON_WIDTH = 100; // px - Individual icon width
-  const ICON_HEIGHT = 100; // px - Individual icon height
-  const CONTAINER_SIZE = 200; // px - Container size around icon
-
-  // Overall Scale & Positioning
-  const OVERALL_SCALE = 1.2; // Overall size multiplier for entire skill ball
-  const DISTANCE_FACTOR = 6; // Lower = bigger icons, Higher = smaller icons
-  const POSITION_SPREAD = 7; // How spread out the icons are in 3D space
-
-  // Glow Effects
-  const NORMAL_GLOW_OUTER = 2; // px - Main glow radius (normal state)
-  const NORMAL_GLOW_INNER = 2; // px - Inner glow radius (normal state)
-  const HOVER_GLOW_OUTER = 2; // px - Main glow radius (hover state)
-  const HOVER_GLOW_MEDIUM = 2; // px - Medium glow radius (hover state)
-  const HOVER_GLOW_INNER = 2; // px - Inner glow radius (hover state)
-
-  // Animation Settings - REMOVED SCROLL-BASED SPINNING
-  const SPIN_SPEED_X = 0.002; // Rotation speed on X axis (constant)
-  const SPIN_SPEED_Y = 0.0025; // Rotation speed on Y axis (constant)
-  const SPIN_SPEED_Z = 0.001; // Rotation speed on Z axis (constant)
-  const PULSE_SCALE_MIN = 0.75; // Minimum scale during pulse
-  const PULSE_SCALE_MAX = 1.25; // Maximum scale during pulse
-  const PULSE_SPEED_BASE = 1; // Base pulse speed
-  const PULSE_SPEED_VARIATION = 0.2; // How much pulse speed varies between icons
-
-  // Hover Effects
-  const HOVER_SCALE = 1.4; // How big icons get on hover
-
-  // ============================================================
-
-  // Random position generator
   const getPos = (k) => {
     let a = Math.random();
     let b = Math.random();
     return b > 0.5 ? a * k : a * -1 * k;
   };
 
-  // Function to convert hex color to CSS filter (to recolor SVGs)
   const hexToFilter = (hex) => {
     const colorMap = {
       "#61DAFB":
@@ -83,7 +81,6 @@ const Skills = () => {
     return colorMap[hex] || "none";
   };
 
-  // Skills with actual SVG file paths and their brand colors
   const skills = [
     { name: "React", svg: reactSvg, color: "#61DAFB" },
     { name: "JavaScript", svg: javascriptSvg, color: "#F7DF1E" },
@@ -99,16 +96,16 @@ const Skills = () => {
   const groupRef = useRef();
   const iconRefs = useRef([]);
 
-  // FIXED: Only constant spinning animation, NO scroll-based effects
+  // FIXED: Completely independent animation - NO scroll dependency!
   useFrame((state) => {
     if (groupRef.current) {
-      // Constant spinning only - no scroll dependency
+      // Pure constant spinning - independent of any external scroll
       groupRef.current.rotation.x += SPIN_SPEED_X;
       groupRef.current.rotation.y += SPIN_SPEED_Y;
       groupRef.current.rotation.z += SPIN_SPEED_Z;
     }
 
-    // Individual icon pulsing animations
+    // Individual icon pulsing animations - also independent
     iconRefs.current.forEach((iconRef, i) => {
       if (iconRef) {
         const time = state.clock.elapsedTime;
@@ -124,23 +121,35 @@ const Skills = () => {
 
   return (
     <>
-      {/* Orbit controls only on desktop */}
       {!isMobile && (
         <OrbitControls
           enablePan={false}
           enableZoom={false}
           enableRotate={true}
-          domElement={document.querySelector("canvas")}
+          // FIXED: Prevent orbit controls from interfering with page scroll
+          domElement={undefined}
+          // FIXED: Disable automatic scroll handling
+          enableDamping={false}
+          // FIXED: Prevent any scroll event capture
+          listenToKeyEvents={undefined}
+          makeDefault={false}
         />
       )}
 
-      {/* Enhanced lighting for better visibility */}
       <pointLight position={[-3, 3, 3]} args={["#fff", 0.5]} />
       <pointLight position={[3, -3, -3]} args={["#fff", 0.3]} />
       <ambientLight intensity={0.6} />
 
-      {/* Skills group - Using OVERALL_SCALE variable */}
-      <group ref={groupRef} position={[0, 0, 0]} scale={OVERALL_SCALE}>
+      <group
+        ref={groupRef}
+        position={[0, 0, 0]}
+        scale={OVERALL_SCALE}
+        // FIXED: Prevent any pointer event propagation
+        onPointerDown={(e) => e.stopPropagation()}
+        onPointerUp={(e) => e.stopPropagation()}
+        onPointerMove={(e) => e.stopPropagation()}
+        onWheel={(e) => e.stopPropagation()}
+      >
         {skills.map((skill, i) => {
           const position = [
             getPos(POSITION_SPREAD),
@@ -162,9 +171,15 @@ const Skills = () => {
                 justifyContent: "center",
                 background: "transparent",
                 cursor: "pointer",
+                // FIXED: Prevent scroll event propagation
+                pointerEvents: "auto",
+                userSelect: "none",
+                touchAction: "none",
               }}
+              // FIXED: Isolated hover effects that don't interfere with page
               onPointerEnter={(e) => {
-                const img = e.target.querySelector("img");
+                e.stopPropagation();
+                const img = e.currentTarget.querySelector("img");
                 if (img) {
                   img.style.transform = `scale(${HOVER_SCALE})`;
                   img.style.filter = `
@@ -176,7 +191,8 @@ const Skills = () => {
                 }
               }}
               onPointerLeave={(e) => {
-                const img = e.target.querySelector("img");
+                e.stopPropagation();
+                const img = e.currentTarget.querySelector("img");
                 if (img) {
                   img.style.transform = "";
                   img.style.filter = `
@@ -210,6 +226,9 @@ const Skills = () => {
                   console.warn(`Failed to load ${skill.name} SVG:`, skill.svg);
                   e.target.style.display = "none";
                 }}
+                // FIXED: Prevent any drag/context menu interference
+                onDragStart={(e) => e.preventDefault()}
+                onContextMenu={(e) => e.preventDefault()}
               />
             </Html>
           );

@@ -1,8 +1,15 @@
 import { useGLTF } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
+import {
+  EffectComposer,
+  Bloom,
+  ChromaticAberration,
+  Vignette,
+} from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
 import CanvasLoader from "./Loader";
-import backgroundScene from "../assets/Background.glb";
+import backgroundScene from "../assets/3D/Background.glb";
 
 // ============================================================
 // 🎯 GALAXY BACKGROUND CONFIGURATION VARIABLES
@@ -22,26 +29,39 @@ const CAMERA_HEIGHT = 3; // Base height above center (z=0)
 const CAMERA_VERTICAL_ARC = -30; // Max vertical swing up/down
 const CAMERA_ORBIT_MULTIPLIER = 20; // Controls how much scroll affects orbit (higher = less orbit)
 
-// LIGHTING VARIABLES
-const DIRECTIONAL_LIGHT_INTENSITY = 2; // Main directional light strength
-const AMBIENT_LIGHT_INTENSITY = 0.5; // Overall ambient lighting
-const POINT_LIGHT_INTENSITY = 2; // Point light for highlights
-const SPOT_LIGHT_INTENSITY = 2; // Spotlight intensity
-const HEMISPHERE_LIGHT_INTENSITY = 1; // Sky/ground lighting
+// GENTLE LIGHTING VARIABLES (toned down for comfort)
+const DIRECTIONAL_LIGHT_INTENSITY = 1.5; // Reduced from 3 for gentler lighting
+const AMBIENT_LIGHT_INTENSITY = 0.4; // Reduced from 0.8 for softer ambient
+const POINT_LIGHT_INTENSITY = 1.8; // Reduced from 4 for less harsh highlights
+const SPOT_LIGHT_INTENSITY = 1.2; // Reduced from 3 for gentler spotlight
+const HEMISPHERE_LIGHT_INTENSITY = 0.8; // Reduced from 1.5 for softer sky lighting
+
+// GENTLE POSTPROCESSING VARIABLES (much more subtle effects)
+const BLOOM_INTENSITY = 0.6; // Reduced from 2.0 for gentle glow instead of harsh bloom
+const BLOOM_LUMINANCE_THRESHOLD = 0.3; // Increased from 0.1 so only brightest areas glow
+const BLOOM_LUMINANCE_SMOOTHING = 0.7; // Reduced from 0.9 for smoother transitions
+const BLOOM_RADIUS = 0.4; // Reduced from 0.8 for tighter, more controlled glow
+const CHROMATIC_ABERRATION_INTENSITY = 0.0001; // Reduced from 0.0005 for barely noticeable effect
+const VIGNETTE_OPACITY = 0.15; // Reduced from 0.3 for very subtle dark edges
 
 // ============================================================
 
-// Galaxy Background Component - Always centered, never moves!
+// Galaxy Background Component - Enhanced with gentle effects
 const Background = () => {
   const ref = useRef();
   const { scene } = useGLTF(backgroundScene);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (ref.current) {
       // GALAXY ROTATION: Subtle spinning animation
       // Connected variables: GALAXY_SPIN_SPEED, GALAXY_IDLE_ROTATION
       ref.current.rotation.y += GALAXY_SPIN_SPEED;
       ref.current.rotation.x += GALAXY_IDLE_ROTATION * 0.3; // Even more subtle on x-axis
+
+      // GENTLE TWINKLING EFFECT: Very slight scale pulsing for subtle shimmer
+      const time = state.clock.elapsedTime;
+      const twinkle = 1 + Math.sin(time * 0.3) * 0.01; // Even more subtle scale change
+      ref.current.scale.setScalar(GALAXY_SCALE * twinkle);
     }
   });
 
@@ -79,7 +99,7 @@ const ScrollOrbitCamera = ({ scrollY }) => {
   return null;
 };
 
-// Main Galaxy Background Component (Hero Section Only)
+// Main Galaxy Background Component (Now with Gentle Glow Effects!)
 const GalaxyModel = ({ scrollY = 0, showBackground = true }) => {
   return (
     <Canvas
@@ -90,25 +110,45 @@ const GalaxyModel = ({ scrollY = 0, showBackground = true }) => {
         near: 0.1,
         far: 1000,
       }}
+      gl={{ antialias: true, alpha: true }}
     >
       <Suspense fallback={<CanvasLoader />}>
-        {/* LIGHTING SETUP: Illuminates the galaxy */}
+        {/* GENTLE LIGHTING SETUP: Balanced lighting for comfortable viewing */}
         {/* Connected variables: All *_INTENSITY variables control these lights */}
         <directionalLight
           position={[1, 1, 1]}
           intensity={DIRECTIONAL_LIGHT_INTENSITY}
+          color="#ffffff"
         />
-        <ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
-        <pointLight position={[10, 5, 10]} intensity={POINT_LIGHT_INTENSITY} />
+        <ambientLight intensity={AMBIENT_LIGHT_INTENSITY} color="#e6f3ff" />
+
+        {/* Softer point lights for gentle galaxy illumination */}
+        <pointLight
+          position={[10, 5, 10]}
+          intensity={POINT_LIGHT_INTENSITY}
+          color="#87ceeb"
+        />
+        <pointLight
+          position={[-10, -5, -10]}
+          intensity={POINT_LIGHT_INTENSITY * 0.6}
+          color="#dda0dd"
+        />
+        <pointLight
+          position={[0, 10, 0]}
+          intensity={POINT_LIGHT_INTENSITY * 0.4}
+          color="#f0e68c"
+        />
+
         <spotLight
           position={[0, 50, 10]}
-          angle={0.15}
+          angle={0.2}
           penumbra={1}
           intensity={SPOT_LIGHT_INTENSITY}
+          color="#f8f8ff"
         />
         <hemisphereLight
-          skyColor="#b1e1ff"
-          groundColor="#000000"
+          skyColor="#e6f3ff"
+          groundColor="#151030"
           intensity={HEMISPHERE_LIGHT_INTENSITY}
         />
 
@@ -118,6 +158,34 @@ const GalaxyModel = ({ scrollY = 0, showBackground = true }) => {
         {/* GALAXY BACKGROUND: Only shows when showBackground is true */}
         {/* Connected variables: All GALAXY_* variables control this component */}
         {showBackground && <Background />}
+
+        {/* GENTLE POST-PROCESSING EFFECTS: Subtle, eye-friendly glow */}
+        <EffectComposer>
+          {/* SOFT BLOOM EFFECT: Creates gentle glow around bright areas */}
+          <Bloom
+            intensity={BLOOM_INTENSITY}
+            luminanceThreshold={BLOOM_LUMINANCE_THRESHOLD}
+            luminanceSmoothing={BLOOM_LUMINANCE_SMOOTHING}
+            radius={BLOOM_RADIUS}
+            blendFunction={BlendFunction.SCREEN}
+          />
+
+          {/* MINIMAL CHROMATIC ABERRATION: Barely perceptible color shift */}
+          <ChromaticAberration
+            blendFunction={BlendFunction.NORMAL}
+            offset={[
+              CHROMATIC_ABERRATION_INTENSITY,
+              CHROMATIC_ABERRATION_INTENSITY,
+            ]}
+          />
+
+          {/* SUBTLE VIGNETTE: Very gentle darkening of edges */}
+          <Vignette
+            offset={0.4}
+            darkness={VIGNETTE_OPACITY}
+            blendFunction={BlendFunction.MULTIPLY}
+          />
+        </EffectComposer>
       </Suspense>
     </Canvas>
   );

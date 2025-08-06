@@ -9,11 +9,11 @@ import highlightScene from "../assets/Highlight.glb";
 // ============================================================
 
 // POSITIONING & MOVEMENT VARIABLES
-const SPACEMAN_BASE_POSITION = [3, -2, -2]; // [x, y, z] - Starting position relative to screen center
+const SPACEMAN_BASE_POSITION = [6, -2, -2]; // [x, y, z] - Starting position relative to screen center
 const SCROLL_MOVEMENT_SPEED = 0.0009; // How fast spaceman moves with scroll (lower = slower)
 const VERTICAL_FALL_SPEED = 0.0004; // How fast spaceman "falls" downward through sections
 const HORIZONTAL_DRIFT_SPEED = 0.001; // Side-to-side floating movement
-const ORBITAL_RADIUS = 3; // Distance from center for orbital movement
+const ORBITAL_RADIUS = 2; // Distance from center for orbital movement
 const ORBITAL_SPEED = 0.2; // Speed of orbital rotation (connected to scroll)
 
 // SCALE & SIZE VARIABLES
@@ -22,7 +22,7 @@ const MOBILE_SCALE = [1.8, 1.8, 1.8]; // Spaceman size on mobile
 
 // ANIMATION & ROTATION VARIABLES
 const IDLE_SPIN_SPEED = 0.02; // Constant rotation speed for spaceman
-const SCROLL_ROTATION_FACTOR = 0.004; // Additional rotation based on scroll
+const SCROLL_ROTATION_FACTOR = 0.0004; // Additional rotation based on scroll
 const FLOAT_ANIMATION_SPEED = 0.9; // Speed of floating up/down animation
 const FLOAT_AMPLITUDE = 0.3; // How much spaceman bobs up/down while floating
 
@@ -34,52 +34,51 @@ const CAMERA_FOV = 70; // Field of view (lower = more zoomed in)
 // ============================================================
 
 // Standalone Spaceman Component
-const Spaceman = ({ scrollY, scale, ...props }) => {
+const Spaceman = ({
+  scrollY,
+  scale,
+  isInAboutSection,
+  currentSection,
+  ...props
+}) => {
   const group = useRef();
   const { scene, animations } = useGLTF(highlightScene);
   const { actions } = useAnimations(animations, group);
 
-  // SCROLL-BASED MOVEMENT CALCULATIONS
-  // These variables work together to create the "falling through sections" effect
   useFrame((state) => {
-    if (group.current) {
-      // ORBITAL MOVEMENT: Spaceman orbits around center based on scroll
-      // Connected variables: ORBITAL_RADIUS, ORBITAL_SPEED, scrollY, SCROLL_MOVEMENT_SPEED
+    if (group.current && !isInAboutSection) {
+      // Only animate when NOT in About section
+      // Your existing animation logic here...
       const orbitalAngle = scrollY * SCROLL_MOVEMENT_SPEED;
       const orbitalX = Math.cos(orbitalAngle) * ORBITAL_RADIUS;
       const orbitalZ = Math.sin(orbitalAngle) * ORBITAL_RADIUS;
 
-      // VERTICAL FALL: Spaceman gradually moves down as user scrolls
-      // Connected variables: VERTICAL_FALL_SPEED, scrollY
       const verticalOffset = -(scrollY * VERTICAL_FALL_SPEED);
-
-      // FLOATING ANIMATION: Gentle bobbing motion independent of scroll
-      // Connected variables: FLOAT_ANIMATION_SPEED, FLOAT_AMPLITUDE, state.clock.elapsedTime
       const floatOffset =
         Math.sin(state.clock.elapsedTime * FLOAT_ANIMATION_SPEED) *
         FLOAT_AMPLITUDE;
-
-      // HORIZONTAL DRIFT: Side-to-side floating movement
-      // Connected variables: HORIZONTAL_DRIFT_SPEED, state.clock.elapsedTime
       const horizontalDrift =
         Math.sin(state.clock.elapsedTime * HORIZONTAL_DRIFT_SPEED) * 0.5;
 
-      // APPLY FINAL POSITION (all movement variables combine here)
       group.current.position.set(
         SPACEMAN_BASE_POSITION[0] + orbitalX + horizontalDrift,
         SPACEMAN_BASE_POSITION[1] + verticalOffset + floatOffset,
         SPACEMAN_BASE_POSITION[2] + orbitalZ
       );
 
-      // ROTATION EFFECTS: Combine idle spin with scroll-based rotation
-      // Connected variables: IDLE_SPIN_SPEED, SCROLL_ROTATION_FACTOR, scrollY
       group.current.rotation.y =
         state.clock.elapsedTime * IDLE_SPIN_SPEED +
         scrollY * SCROLL_ROTATION_FACTOR;
     }
+
+    // When in About section, keep spaceman static/minimal
+    if (isInAboutSection && group.current) {
+      // Minimal gentle floating only
+      const gentleFloat = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      group.current.position.y = SPACEMAN_BASE_POSITION[1] + gentleFloat;
+    }
   });
 
-  // Start idle animation
   useEffect(() => {
     if (actions && actions["Idle"]) actions["Idle"].play();
   }, [actions, animations]);
@@ -92,9 +91,12 @@ const Spaceman = ({ scrollY, scale, ...props }) => {
 };
 
 // Main Spaceman Model Component
-const SpacemanModel = ({ scrollY = 0 }) => {
-  // RESPONSIVE SCALE: Adjust spaceman size based on screen size
-  // Connected variables: DESKTOP_SCALE, MOBILE_SCALE
+const SpacemanModel = ({
+  scrollY = 0,
+  currentSection = "hero",
+  isInAboutSection = false,
+}) => {
+  // Existing scale logic...
   const [scale, setScale] = useState(DESKTOP_SCALE);
 
   useEffect(() => {
@@ -113,10 +115,24 @@ const SpacemanModel = ({ scrollY = 0 }) => {
 
   return (
     <div
-      className="fixed top-0 left-0 w-full h-screen pointer-events-none z-50"
+      className="fixed top-0 left-0 w-full h-screen z-50"
       style={{
         background: "transparent",
-        pointerEvents: "none", // Allows clicks to pass through to content below
+        pointerEvents: "none",
+        userSelect: "none",
+        touchAction: "none",
+        WebkitUserSelect: "none",
+        MozUserSelect: "none",
+        msUserSelect: "none",
+        WebkitTouchCallout: "none",
+        WebkitTapHighlightColor: "transparent",
+        // Enhanced isolation for About section
+        opacity: isInAboutSection ? 0.2 : 1,
+        transition: "opacity 0.3s ease-in-out",
+        // CSS isolation to prevent event capture
+        isolation: "isolate",
+        // Ensure it doesn't interfere with underlying content
+        mixBlendMode: isInAboutSection ? "multiply" : "normal",
       }}
     >
       <Canvas
@@ -127,9 +143,61 @@ const SpacemanModel = ({ scrollY = 0 }) => {
           near: 0.1,
           far: 1000,
         }}
+        onCreated={({ gl, scene, camera }) => {
+          // ENHANCED: Complete event blocking
+          const canvas = gl.domElement;
+
+          // Remove all event listeners
+          canvas.style.pointerEvents = "none";
+          canvas.style.userSelect = "none";
+          canvas.style.touchAction = "none";
+          canvas.style.webkitUserSelect = "none";
+          canvas.style.webkitTouchCallout = "none";
+          canvas.style.webkitTapHighlightColor = "transparent";
+
+          // Additional safety for About section
+          if (isInAboutSection) {
+            canvas.style.visibility = "hidden";
+            canvas.style.zIndex = "-1";
+            canvas.style.position = "absolute";
+            canvas.style.top = "-9999px";
+            canvas.style.left = "-9999px";
+          } else {
+            canvas.style.visibility = "visible";
+            canvas.style.zIndex = "auto";
+            canvas.style.position = "static";
+            canvas.style.top = "auto";
+            canvas.style.left = "auto";
+          }
+
+          // Prevent any context menu
+          canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+
+          // Block all mouse events
+          [
+            "mousedown",
+            "mouseup",
+            "mousemove",
+            "click",
+            "dblclick",
+            "wheel",
+            "touchstart",
+            "touchmove",
+            "touchend",
+          ].forEach((event) => {
+            canvas.addEventListener(
+              event,
+              (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              },
+              { capture: true, passive: false }
+            );
+          });
+        }}
       >
         <Suspense fallback={<CanvasLoader />}>
-          {/* LIGHTING SETUP: Illuminates the spaceman */}
+          {/* Lighting... */}
           <directionalLight position={[1, 1, 1]} intensity={2} />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 5, 10]} intensity={2} />
@@ -145,8 +213,13 @@ const SpacemanModel = ({ scrollY = 0 }) => {
             intensity={1}
           />
 
-          {/* SPACEMAN COMPONENT: All movement variables are processed here */}
-          <Spaceman scrollY={scrollY} scale={scale} />
+          {/* Pass section info to Spaceman component */}
+          <Spaceman
+            scrollY={scrollY}
+            scale={scale}
+            isInAboutSection={isInAboutSection}
+            currentSection={currentSection}
+          />
         </Suspense>
       </Canvas>
     </div>
