@@ -1,354 +1,421 @@
-import { Canvas } from "@react-three/fiber";
-import React, { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import { motion } from "framer-motion";
-import { blue, green, orange } from "../../utils";
-import { AboutItem } from "./AboutItem";
-import Skills from "./SkillBall";
-import { AnimatedSectionTitle } from "../../components/AnimatedSectionTitle";
+import React, { useState } from "react"
 
-// ============================================================
-// 🎯 ABOUT PAGE CONFIGURATION - SIMPLIFIED!
-// ============================================================
+const About = () => {
+  const [activeCard, setActiveCard] = useState(0)
 
-// TEXT CONTENT
-const PAGE_TITLE = "About";
-const ABOUT_ME_TITLE = "About Me";
-const ABOUT_ME_TEXT_1 =
-  "I'm a passionate programmer, who is always looking for new challenges to improve myself, also a team player, who is always ready to learn new things and help others.";
-const ABOUT_ME_TEXT_2 =
-  "I was born and raised in Nagpur, India. I love to play guitar and ukulele and in my free time I like to read books, watch movies and play video games.";
-
-const EDUCATION_TITLE = "Education";
-const ACADEMIC_FOCUS_LABEL = "Academic Focus:";
-const ACADEMIC_FOCUS_TEXT =
-  "Throughout my educational journey, I've maintained a strong focus on computer science and engineering principles, with particular interest in software development, web technologies, and problem-solving methodologies.";
-
-const MAIN_QUOTE = "Always learning, always growing";
-const QUOTE_DESCRIPTION =
-  "My journey in technology is driven by curiosity and the desire to create meaningful digital experiences. Each project is an opportunity to learn something new and push the boundaries of what's possible.";
-
-const SKILLS_TITLE = "Technologies & Skills";
-const SKILLS_DESCRIPTION =
-  "Interactive 3D visualization of my technical skills and expertise. Hover over the floating icons to explore!";
-const LOADING_MESSAGE = "Loading 3D skills...";
-
-// EDUCATION DATA
-const EDUCATION_CARDS = [
-  {
-    id: 0,
-    color: blue,
-    title: "D.Y. Patil college of engineering, Pune",
-    subtitle: "Bachelors of Computer Engineering (2019-2023)",
-    image: "https://via.placeholder.com/100x100/0A3C36/ffffff?text=College",
-  },
-  {
-    id: 1,
-    color: green,
-    title: "M.P. Deo D. Science College, Nagpur",
-    subtitle: "High School (2017-2019)",
-    image: "https://via.placeholder.com/100x100/DE8A3B/ffffff?text=HS",
-  },
-  {
-    id: 2,
-    color: orange,
-    title: "School of Scholars, Nagpur",
-    subtitle: "Secondary Education (2007-2017)",
-    image: "https://via.placeholder.com/100x100/C779AE/ffffff?text=Elem",
-  },
-];
-
-// LEGEND CATEGORIES
-const LEGEND_CATEGORIES = [
-  { color: "#0A3C36", label: "Frontend" },
-  { color: "#DE8A3B", label: "Backend" },
-  { color: "#C779AE", label: "Tools" },
-];
-
-// NUMERIC VALUES
-const CAMERA_POSITION = [0, 0, 10];
-const CAMERA_FOV = 75;
-
-// ============================================================
-
-export const About = () => {
-  const { ref, inView } = useInView({});
-  const [show, setShow] = useState(inView);
-  const [activeCard, setActiveCard] = useState(0);
-
-  useEffect(() => {
-    setShow(inView);
-  }, [inView]);
-
-  const handleCardClick = (index) => {
-    setActiveCard(index);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3
-      }
-    }
-  };
-
-  const textSectionVariants = {
-    hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const visualSectionVariants = {
-    hidden: { opacity: 0, x: 50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
+  // Simplified education data
+  const education = [
+    {
+      id: 0,
+      title: "D.Y. Patil College of Engineering, Pune",
+      subtitle: "Bachelors of Computer Engineering (2019-2023)",
+      image: "https://via.placeholder.com/100x100/ff6b47/ffffff?text=College",
+      colorScheme: {
+        background: "#fee1c7",
+        border: "#4a9b8e",
+        text: "#2a3441",
+        accent: "#8b4513",
+      },
+    },
+    {
+      id: 1,
+      title: "M.P. Deo D. Science College, Nagpur",
+      subtitle: "High School (2017-2019)",
+      image: "https://via.placeholder.com/100x100/4a9b8e/ffffff?text=HS",
+      colorScheme: {
+        background: "#2a3441",
+        border: "#ff8c42",
+        text: "#fee1c7",
+        accent: "#d4a5c7",
+      },
+    },
+    {
+      id: 2,
+      title: "School of Scholars, Nagpur",
+      subtitle: "Secondary Education (2007-2017)",
+      image: "https://via.placeholder.com/100x100/ff8c42/ffffff?text=Elem",
+      colorScheme: {
+        background: "#2a3441",
+        border: "#ff6b47",
+        text: "#fee1c7",
+        accent: "#ff6b47",
+      },
+    },
+  ]
 
   return (
-    <section
-      id="about"
-      ref={ref}
-      className="min-h-screen py-16 px-6 relative overflow-hidden"
-      style={{ 
-        backgroundColor: '#151618',
-        isolation: "isolate" 
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#2a3441",
+        padding: "40px 20px",
+        fontFamily: '"Roboto Mono", "Courier New", monospace',
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      {/* Animated Background Elements - Outline Only */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-2 h-2 rounded-full animate-twinkle border" style={{ borderColor: '#0A3C36' }}></div>
-        <div className="absolute top-40 right-20 w-1 h-1 rounded-full animate-pulse-slow border" style={{ borderColor: '#DE8A3B' }}></div>
-        <div className="absolute bottom-32 left-1/4 w-3 h-3 rounded-full animate-twinkle border" style={{ borderColor: '#C779AE', animationDelay: '1s' }}></div>
-        <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 rounded-full animate-pulse-slow border" style={{ borderColor: '#065F55', animationDelay: '2s' }}></div>
-        <div className="absolute bottom-20 right-10 w-2 h-2 rounded-full animate-twinkle border" style={{ borderColor: '#DE8A3B', animationDelay: '0.5s' }}></div>
+      {/* Animated Background Elements */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: "hidden",
+          pointerEvents: "none",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: "80px",
+            left: "40px",
+            width: "8px",
+            height: "8px",
+            borderRadius: "50%",
+            border: "2px solid #ff6b47",
+            backgroundColor: "transparent",
+            animation: "twinkle 2s ease-in-out infinite",
+          }}
+        ></div>
+        <div
+          style={{
+            position: "absolute",
+            top: "160px",
+            right: "80px",
+            width: "4px",
+            height: "4px",
+            borderRadius: "50%",
+            border: "2px solid #4a9b8e",
+            backgroundColor: "transparent",
+            animation: "pulse 2s infinite",
+          }}
+        ></div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "128px",
+            left: "25%",
+            width: "12px",
+            height: "12px",
+            borderRadius: "50%",
+            border: "2px solid #ff8c42",
+            backgroundColor: "transparent",
+            animation: "twinkle 2s ease-in-out infinite",
+            animationDelay: "1s",
+          }}
+        ></div>
       </div>
 
-      {/* Full Width Container */}
-      <div className="w-full max-w-none mx-auto relative z-10">
-        {/* Animated Page Header */}
-        <div className="max-w-7xl mx-auto">
-          <AnimatedSectionTitle 
-            title={PAGE_TITLE}
-            subtitle="Discover my journey, skills, and passion for creating digital experiences"
-            animationType="slideInUp"
+      <div
+        style={{
+          maxWidth: "1400px",
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
+        {/* Title */}
+        <div style={{ textAlign: "center", marginBottom: "60px" }}>
+          <h1
+            style={{
+              fontSize: "48px",
+              fontWeight: "bold",
+              color: "#ff8c42",
+              letterSpacing: "4px",
+              marginBottom: "20px",
+              fontFamily: '"Roboto Mono", "Courier New", monospace',
+              textShadow: "0 0 30px rgba(255, 140, 66, 0.4)",
+            }}
+          >
+            ABOUT
+          </h1>
+          <p
+            style={{
+              color: "#fee1c7",
+              fontSize: "18px",
+              opacity: 0.8,
+              marginTop: "16px",
+              fontFamily: '"Roboto Mono", "Courier New", monospace',
+              maxWidth: "600px",
+              margin: "16px auto 0",
+            }}
+          >
+            Discover my journey, skills, and passion for creating digital
+            experiences
+          </p>
+          <div
+            style={{
+              width: "200px",
+              height: "4px",
+              margin: "20px auto 0",
+              backgroundColor: "transparent",
+              border: "2px solid #ff8c42",
+              borderRadius: "4px",
+              boxShadow: "0 0 20px rgba(255, 140, 66, 0.4)",
+            }}
           />
         </div>
 
-        {/* Full Width 2-Column Layout */}
-        <motion.div 
-          className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-[80vh]"
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+        {/* NEW LAYOUT - Education Left, About Me Center, Floating Logos Right */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gap: "32px",
+            marginBottom: "80px",
+          }}
         >
-          {/* Left Column - Text Content (Full Half) */}
-          <motion.div 
-            className="p-8 lg:p-16 flex flex-col justify-start space-y-8 border-r"
-            style={{ 
-              backgroundColor: '#151618',
-              borderColor: 'rgba(10, 60, 54, 0.2)'
+          {/* Left Column - Education (Moved from bottom) */}
+          <div
+            style={{
+              backgroundColor: "#fee1c7",
+              border: "3px solid #ff8c42",
+              borderRadius: "12px",
+              boxShadow: "4px 4px 0 #ff8c42, 0 0 30px rgba(255, 140, 66, 0.3)",
+              padding: "32px",
             }}
-            variants={textSectionVariants}
           >
-            {/* About Me Section */}
-            <motion.div 
-              className="space-y-6"
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <h2 className="text-2xl lg:text-3xl font-bold mb-6" style={{ 
-                background: 'linear-gradient(to right, #0A3C36, #DE8A3B)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent', 
-                backgroundClip: 'text' 
-              }}>
-                {ABOUT_ME_TITLE}
-              </h2>
-              <p className="text-secondary text-base lg:text-lg leading-relaxed">
-                {ABOUT_ME_TEXT_1}
-              </p>
-              <p className="text-secondary text-base lg:text-lg leading-relaxed">
-                {ABOUT_ME_TEXT_2}
-              </p>
-            </motion.div>
-
-            {/* Education Section */}
-            <motion.div 
-              className="space-y-6"
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <h2 className="text-2xl lg:text-3xl font-bold mb-6" style={{ 
-                background: 'linear-gradient(to right, #DE8A3B, #C779AE)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent', 
-                backgroundClip: 'text' 
-              }}>
-                {EDUCATION_TITLE}
-              </h2>
-
-              <div className="space-y-4">
-                {EDUCATION_CARDS.map((card, index) => (
-                  <motion.div
-                    key={card.id}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-                    transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                  >
-                    <AboutItem
-                      color={card.color}
-                      active={activeCard === card.id}
-                      onClick={() => handleCardClick(card.id)}
-                      data={{
-                        title: card.title,
-                        p: card.subtitle,
-                        image: card.image,
-                      }}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div 
-                className="mt-8 p-6 backdrop-blur-sm border rounded-xl"
-                style={{
-                  backgroundColor: 'rgba(10, 60, 54, 0.1)',
-                  borderColor: 'rgba(10, 60, 54, 0.2)',
-                }}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.5, delay: 0.9 }}
-              >
-                <p className="text-secondary text-sm leading-relaxed">
-                  <strong style={{ color: '#0A3C36' }}>{ACADEMIC_FOCUS_LABEL}</strong>{" "}
-                  {ACADEMIC_FOCUS_TEXT}
-                </p>
-              </motion.div>
-            </motion.div>
-
-            {/* Quote Section */}
-            <motion.div 
-              className="text-center lg:text-left"
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: 1.1 }}
-            >
-              <div className="max-w-lg">
-                <h3 className="text-lg lg:text-xl font-semibold mb-6" style={{ 
-                  background: 'linear-gradient(to right, #C779AE, #065F55)', 
-                  WebkitBackgroundClip: 'text', 
-                  WebkitTextFillColor: 'transparent', 
-                  backgroundClip: 'text' 
-                }}>
-                  "{MAIN_QUOTE}"
-                </h3>
-                <p className="text-secondary text-sm lg:text-base leading-relaxed">
-                  {QUOTE_DESCRIPTION}
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Right Column - Visual Container (Full Half) */}
-          <motion.div 
-            className="p-8 lg:p-16 flex flex-col items-center justify-center"
-            style={{ 
-              backgroundColor: '#151618'
-            }}
-            variants={visualSectionVariants}
-          >
-            <motion.div 
-              className="text-center mb-8 w-full"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <h2 className="text-2xl lg:text-3xl font-bold mb-4" style={{ 
-                background: 'linear-gradient(to right, #0A3C36, #DE8A3B, #C779AE)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent', 
-                backgroundClip: 'text' 
-              }}>
-                {SKILLS_TITLE}
-              </h2>
-              <p className="text-secondary text-sm max-w-md mx-auto">
-                {SKILLS_DESCRIPTION}
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="w-full max-w-2xl h-[500px] lg:h-[600px] relative backdrop-blur-sm overflow-hidden border-2 rounded-2xl"
+            <h2
               style={{
-                backgroundColor: 'rgba(10, 60, 54, 0.05)',
-                borderColor: 'rgba(10, 60, 54, 0.2)',
+                fontSize: "24px",
+                fontWeight: "bold",
+                color: "#ff8c42",
+                marginBottom: "24px",
+                textAlign: "center",
+                fontFamily: '"Roboto Mono", "Courier New", monospace',
               }}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
             >
-              {show ? (
-                <Canvas
-                  camera={{ position: CAMERA_POSITION, fov: CAMERA_FOV }}
-                  className="w-full h-full rounded-2xl"
+              EDUCATION
+            </h2>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+              }}
+            >
+              {education.map((item, index) => (
+                <div
+                  key={item.id}
+                  onClick={() => setActiveCard(item.id)}
+                  style={{
+                    backgroundColor: item.colorScheme.background,
+                    border: `3px solid ${item.colorScheme.border}`,
+                    borderRadius: "8px",
+                    boxShadow: `4px 4px 0 ${item.colorScheme.border}`,
+                    padding: "16px",
+                    cursor: "pointer",
+                    transition: "all 0.1s ease-in",
+                    transform:
+                      activeCard === item.id ? "translate(-1px, -1px)" : "none",
+                  }}
+                  onMouseDown={(e) => {
+                    e.currentTarget.style.transform = "translate(2px, 2px)"
+                    e.currentTarget.style.boxShadow = `2px 2px 0 ${item.colorScheme.border}`
+                  }}
+                  onMouseUp={(e) => {
+                    e.currentTarget.style.transform =
+                      activeCard === item.id ? "translate(-1px, -1px)" : "none"
+                    e.currentTarget.style.boxShadow = `4px 4px 0 ${item.colorScheme.border}`
+                  }}
                 >
-                  <Skills />
-                </Canvas>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="canvas-loader mb-4"></div>
-                    <p className="text-secondary text-sm">{LOADING_MESSAGE}</p>
-                  </div>
+                  <h3
+                    style={{
+                      color: item.colorScheme.text,
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p
+                    style={{
+                      color: item.colorScheme.accent,
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.subtitle}
+                  </p>
                 </div>
-              )}
-
-              {/* Floating Elements - Outline Only */}
-              <div className="absolute top-4 right-4 w-2 h-2 rounded-full animate-pulse border" style={{ borderColor: '#0A3C36' }}></div>
-              <div className="absolute bottom-6 left-6 w-1 h-1 rounded-full animate-ping border" style={{ borderColor: '#DE8A3B' }}></div>
-              <div className="absolute top-1/3 left-4 w-1.5 h-1.5 rounded-full animate-pulse border" style={{ borderColor: '#C779AE' }}></div>
-              <div className="absolute bottom-1/3 right-6 w-1 h-1 rounded-full animate-twinkle border" style={{ borderColor: '#065F55' }}></div>
-            </motion.div>
-
-            <motion.div 
-              className="mt-8 grid grid-cols-3 gap-6 w-full max-w-md"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-            >
-              {LEGEND_CATEGORIES.map((category, index) => (
-                <motion.div 
-                  key={index} 
-                  className="text-center"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.4, delay: 1.0 + index * 0.1 }}
-                >
-                  <div className="w-4 h-4 rounded-full mx-auto mb-2 animate-pulse border" style={{ borderColor: category.color }}></div>
-                  <span className="text-secondary text-xs font-medium">
-                    {category.label}
-                  </span>
-                </motion.div>
               ))}
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </div>
+          </div>
+
+          {/* Center Column - About Me */}
+          <div
+            style={{
+              backgroundColor: "#2a3441",
+              border: "3px solid #ff6b47",
+              borderRadius: "12px",
+              boxShadow: "4px 4px 0 #ff6b47, 0 0 30px rgba(255, 107, 71, 0.3)",
+              padding: "32px",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                color: "#ff6b47",
+                marginBottom: "24px",
+                textAlign: "center",
+                fontFamily: '"Roboto Mono", "Courier New", monospace',
+              }}
+            >
+              ABOUT ME
+            </h2>
+            <p
+              style={{
+                color: "#fee1c7",
+                fontSize: "16px",
+                lineHeight: "1.6",
+                marginBottom: "20px",
+              }}
+            >
+              I'm a passionate programmer, always looking for new challenges to
+              improve myself. A team player who's always ready to learn new
+              things and help others.
+            </p>
+            <p
+              style={{
+                color: "#fee1c7",
+                fontSize: "16px",
+                lineHeight: "1.6",
+                marginBottom: "20px",
+              }}
+            >
+              Born and raised in Nagpur, India. I love to play guitar and
+              ukulele. In my free time I like to read books, watch movies and
+              play video games.
+            </p>
+            <div
+              style={{
+                padding: "16px",
+                backgroundColor: "#1f2937",
+                border: "2px solid #ff6b47",
+                borderRadius: "8px",
+                marginTop: "24px",
+              }}
+            >
+              <p
+                style={{
+                  color: "#ff8c42",
+                  fontSize: "16px",
+                  fontStyle: "italic",
+                  textAlign: "center",
+                  margin: 0,
+                }}
+              >
+                "Always learning, always growing"
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column - Floating Tech Logos */}
+          <div
+            style={{
+              position: "relative",
+              backgroundColor: "#fee1c7",
+              border: "3px solid #4a9b8e",
+              borderRadius: "12px",
+              boxShadow: "4px 4px 0 #4a9b8e, 0 0 30px rgba(74, 155, 142, 0.3)",
+              padding: "32px",
+              minHeight: "400px",
+              overflow: "hidden",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                color: "#4a9b8e",
+                marginBottom: "24px",
+                textAlign: "center",
+                fontFamily: '"Roboto Mono", "Courier New", monospace',
+              }}
+            >
+              TECH STACK
+            </h2>
+
+            {/* Floating Tech Logos */}
+            <div style={{ position: "relative", height: "300px" }}>
+              {[
+                { name: "React", x: "10%", y: "20%", delay: "0s", color: "#61dafb" },
+                { name: "Node.js", x: "70%", y: "15%", delay: "0.5s", color: "#339933" },
+                { name: "Three.js", x: "20%", y: "60%", delay: "1s", color: "#000000" },
+                { name: "MongoDB", x: "80%", y: "70%", delay: "1.5s", color: "#47a248" },
+                { name: "TypeScript", x: "50%", y: "40%", delay: "2s", color: "#3178c6" },
+                { name: "AWS", x: "30%", y: "80%", delay: "2.5s", color: "#ff9900" },
+              ].map((tech, index) => (
+                <div
+                  key={tech.name}
+                  style={{
+                    position: "absolute",
+                    left: tech.x,
+                    top: tech.y,
+                    backgroundColor: "transparent",
+                    border: "3px solid #4a9b8e",
+                    borderRadius: "8px",
+                    padding: "8px 12px",
+                    color: "#4a9b8e",
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    transition: "all 0.1s ease-in",
+                    boxShadow: "4px 4px 0 #4a9b8e",
+                    animation: `float 3s ease-in-out infinite`,
+                    animationDelay: tech.delay,
+                    transform: "translate(-50%, -50%)",
+                  }}
+                  onMouseDown={(e) => {
+                    e.currentTarget.style.transform = "translate(-50%, -50%) translate(2px, 2px)"
+                    e.currentTarget.style.boxShadow = "2px 2px 0 #4a9b8e"
+                  }}
+                  onMouseUp={(e) => {
+                    e.currentTarget.style.transform = "translate(-50%, -50%)"
+                    e.currentTarget.style.boxShadow = "4px 4px 0 #4a9b8e"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "#ead6c0"
+                    e.currentTarget.style.borderColor = tech.color
+                    e.currentTarget.style.color = tech.color
+                    e.currentTarget.style.boxShadow = `4px 4px 0 ${tech.color}`
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent"
+                    e.currentTarget.style.borderColor = "#4a9b8e"
+                    e.currentTarget.style.color = "#4a9b8e"
+                    e.currentTarget.style.boxShadow = "4px 4px 0 #4a9b8e"
+                  }}
+                >
+                  {tech.name}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
-  );
-};
+
+      <style>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        @keyframes float {
+          0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+          50% { transform: translate(-50%, -50%) translateY(-10px); }
+        }
+      `}</style>
+    </div>
+  )
+}
+
+export default About

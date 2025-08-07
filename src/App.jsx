@@ -108,6 +108,7 @@ const App = () => {
           Added pointer-events: auto to ensure clickable elements work
         */}
         <div
+          id="about"
           className="relative z-30 bg-primary/80 backdrop-blur-sm"
           style={{
             isolation: "isolate",
@@ -119,32 +120,35 @@ const App = () => {
 
         {/* EXPERIENCE SECTION */}
         <div
+          id="experience"
           className="relative z-30 bg-primary/80 backdrop-blur-sm"
           style={{ isolation: "isolate", pointerEvents: "auto" }}
         >
           <Experience />
         </div>
 
-        {/* PORTFOLIO SECTION - Placeholder */}
+        {/* PROJECTS SECTION */}
         {/* 
-          Future portfolio content with galaxy background visible
+          Portfolio content with galaxy background visible
           Z-index: 30 (same as other content sections)
           Background: semi-transparent for galaxy visibility
         */}
         <div
+          id="projects"
           className="relative z-30 bg-primary/80 backdrop-blur-sm"
           style={{ isolation: "isolate", pointerEvents: "auto" }}
         >
           <Projects />
         </div>
 
-        {/* CONTACT SECTION - Placeholder */}
+        {/* CONTACT SECTION */}
         {/* 
-          Future contact content with galaxy background visible
+          Contact content with galaxy background visible
           Z-index: 30 (same as other content sections)
           Background: semi-transparent for galaxy visibility
         */}
         <div
+          id="contact"
           className="relative z-30 bg-primary/80 backdrop-blur-sm"
           style={{ isolation: "isolate", pointerEvents: "auto" }}
         >

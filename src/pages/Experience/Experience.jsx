@@ -1,192 +1,286 @@
-import gsap from "gsap";
-import Flip from "gsap/Flip";
-import React, { useEffect } from "react";
-import { motion } from "framer-motion";
-import { experiences } from "../../data/experiences";
-import { useScreenWidth } from "../../hooks/useScreenWidth";
-import { ExperienceItem } from "./ExperienceItem";
-import { AnimatedSectionTitle } from "../../components/AnimatedSectionTitle";
+import React, { useState } from "react"
+import { COLORS } from "/home/dwsn/projects/rdm-port/src/components/PixelatedComponents.jsx"
 
-export const Experience = () => {
-  const { width } = useScreenWidth();
+const Experience = () => {
+  const [activeCard, setActiveCard] = useState(0)
 
-  useEffect(() => {
-    gsap.registerPlugin(Flip);
-    let cards = document.querySelectorAll(".experience-item");
-    cards.forEach((card, i) => {
-      card.classList.remove("active");
-      if (i === 0) {
-        card.classList.add("active");
-      }
-      card.addEventListener(width < 720 ? "click" : "mouseenter", (e) => {
-        if (card.classList.contains("active")) {
-          return;
-        }
-        const state = Flip.getState(cards);
-        cards.forEach((c) => {
-          c.classList.remove("active");
-        });
-        card.classList.add("active");
-        Flip.from(state, {
-          duration: 0.5,
-          ease: "elastic.out(1,0.9)",
-          absolute: true,
-        });
-      });
-    });
-  }, [width]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
-  };
+  const experiences = [
+    {
+      id: 0,
+      name: "Company 1",
+      title: "Software Developer",
+      joined: "2022",
+      end: "Present",
+      bio: "Working on full-stack development using React, Node.js, and cloud technologies.",
+      logo: "https://via.placeholder.com/64x64/ff6b47/232c33?text=C1",
+      technologies: ["React", "Node.js", "AWS", "MongoDB"],
+      colorScheme: {
+        background: "#2a3441",
+        border: "#ff6b47",
+        text: "#fee1c7",
+        accent: "#ff6b47",
+        glow: "rgba(255, 107, 71, 0.3)",
+      },
+    },
+    {
+      id: 1,
+      name: "Company 2",
+      title: "Frontend Developer",
+      joined: "2021",
+      end: "2022",
+      bio: "Developed responsive web applications using React and TypeScript.",
+      logo: "https://via.placeholder.com/64x64/4a9b8e/fee1c7?text=C2",
+      technologies: ["React", "TypeScript", "SCSS", "Git"],
+      colorScheme: {
+        background: "#2a3441",
+        border: "#4a9b8e",
+        text: "#fee1c7",
+        accent: "#4a9b8e",
+        glow: "rgba(74, 155, 142, 0.3)",
+      },
+    },
+    {
+      id: 2,
+      name: "Company 3",
+      title: "Junior Developer",
+      joined: "2020",
+      end: "2021",
+      bio: "Built interactive websites and learned modern development practices.",
+      logo: "https://via.placeholder.com/64x64/ff8c42/2a3441?text=C3",
+      technologies: ["HTML", "CSS", "JavaScript", "Bootstrap"],
+      colorScheme: {
+        background: "#2a3441",
+        border: "#ff8c42",
+        text: "#fee1c7",
+        accent: "#d4a5c7",
+        glow: "rgba(255, 140, 66, 0.3)",
+      },
+    },
+  ]
 
   return (
-    <section className="min-h-screen py-16 px-6 relative overflow-hidden" style={{ backgroundColor: '#151618' }}>
-      {/* Animated Background Elements - Outline Only */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-2 h-2 rounded-full animate-twinkle border" style={{ borderColor: '#0A3C36' }}></div>
-        <div className="absolute top-60 right-20 w-1 h-1 rounded-full animate-pulse-slow border" style={{ borderColor: '#DE8A3B' }}></div>
-        <div className="absolute bottom-40 left-1/4 w-3 h-3 rounded-full animate-twinkle border" style={{ borderColor: '#C779AE', animationDelay: '1s' }}></div>
-        <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 rounded-full animate-pulse-slow border" style={{ borderColor: '#065F55', animationDelay: '2s' }}></div>
-        <div className="absolute bottom-20 right-10 w-2 h-2 rounded-full animate-twinkle border" style={{ borderColor: '#DE8A3B', animationDelay: '0.5s' }}></div>
-        <div className="absolute top-1/2 left-10 w-1 h-1 rounded-full animate-pulse-slow border" style={{ borderColor: '#C779AE', animationDelay: '1.5s' }}></div>
-      </div>
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#2a3441",
+        padding: "40px 20px",
+        fontFamily: '"Roboto Mono", "Courier New", monospace',
+      }}
+    >
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        {/* Title with Orange Glow */}
+        <div style={{ textAlign: "center", marginBottom: "60px" }}>
+          <h1
+            style={{
+              fontSize: "48px",
+              fontWeight: "bold",
+              color: "#ff8c42",
+              letterSpacing: "4px",
+              marginBottom: "20px",
+              fontFamily: '"Roboto Mono", "Courier New", monospace',
+              textShadow: "0 0 30px rgba(255, 140, 66, 0.4)",
+            }}
+          >
+            EXPERIENCE
+          </h1>
+          <div
+            style={{
+              width: "200px",
+              height: "4px",
+              margin: "0 auto",
+              backgroundColor: "transparent",
+              border: "2px solid #ff8c42",
+              borderRadius: "4px",
+              boxShadow: "0 0 20px rgba(255, 140, 66, 0.4)",
+            }}
+          />
+        </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Animated Page Header */}
-        <AnimatedSectionTitle 
-          title="Experience"
-          subtitle="Journey through my professional galaxy - explore the missions, technologies, and achievements that have shaped my career trajectory."
-          animationType="slideInUp"
-        />
-
-        {/* Centered Experience Container */}
-        <motion.div 
-          className="flex justify-center items-center min-h-[700px] px-4"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
+        {/* Experience Cards - ORIGINAL LAYOUT */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+            gap: "32px",
+            marginBottom: "48px",
+          }}
         >
-          <div className="w-full max-w-6xl">
-            {/* Experience Items Container - Fixed Layout to Prevent Movement */}
-            <motion.div 
-              className={`
-                flex justify-center items-stretch gap-4 h-full
-                ${width < 720 
-                  ? 'flex-col max-w-md mx-auto space-y-4' 
-                  : width < 1024 
-                    ? 'flex-wrap justify-center gap-6' 
-                    : 'flex-nowrap'
-                }
-              `}
-              variants={itemVariants}
-              style={{
-                // Fix container to prevent movement during hover
-                position: 'relative',
-                overflow: 'visible'
-              }}
-            >
-              {experiences.map((exp, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className={`
-                    ${width < 720 
-                      ? 'w-full' 
-                      : width < 1024 
-                        ? 'w-80 flex-shrink-0' 
-                        : 'flex-1 min-w-0'
-                    }
-                  `}
+          {experiences.map((exp, index) => {
+            const scheme = exp.colorScheme
+            return (
+              <div
+                key={exp.id}
+                onClick={() => setActiveCard(exp.id)}
+                style={{
+                  backgroundColor: scheme.background,
+                  border: `3px solid ${scheme.border}`,
+                  borderRadius: "8px",
+                  boxShadow:
+                    activeCard === exp.id
+                      ? `6px 6px 0 ${scheme.border}, 0 0 40px ${scheme.glow}`
+                      : `4px 4px 0 ${scheme.border}, 0 0 25px ${scheme.glow}`,
+                  padding: "24px",
+                  transition: "all 0.1s ease-in",
+                  transform:
+                    activeCard === exp.id ? "translate(-1px, -1px)" : "none",
+                  cursor: "pointer",
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = "translate(2px, 2px)"
+                  e.currentTarget.style.boxShadow = `2px 2px 0 ${scheme.border}, 0 0 15px ${scheme.glow}`
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform =
+                    activeCard === exp.id ? "translate(-1px, -1px)" : "none"
+                  e.currentTarget.style.boxShadow =
+                    activeCard === exp.id
+                      ? `6px 6px 0 ${scheme.border}, 0 0 40px ${scheme.glow}`
+                      : `4px 4px 0 ${scheme.border}, 0 0 25px ${scheme.glow}`
+                }}
+              >
+                {/* Company Logo */}
+                <div
                   style={{
-                    // Ensure each item maintains its position
-                    position: 'relative',
-                    zIndex: 1
+                    width: "64px",
+                    height: "64px",
+                    margin: "0 auto 16px",
+                    backgroundColor: "transparent",
+                    border: `3px solid ${scheme.border}`,
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    overflow: "hidden",
                   }}
                 >
-                  <ExperienceItem data={exp} index={index} />
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </motion.div>
+                  <img
+                    src={exp.logo}
+                    alt={exp.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      imageRendering: "pixelated",
+                    }}
+                  />
+                </div>
 
-        {/* Enhanced Instructions */}
-        <motion.div 
-          className="text-center mt-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          <div className="inline-flex items-center gap-3 backdrop-blur-sm border rounded-full px-6 py-3 bg-transparent" style={{
-            borderColor: 'rgba(10, 60, 54, 0.2)'
-          }}>
-            <div className="w-2 h-2 rounded-full animate-pulse border" style={{ borderColor: '#0A3C36', backgroundColor: '#0A3C36' }}></div>
-            <p className="text-secondary text-sm">
-              {width < 720 ? "Tap" : "Hover"} on each experience card to explore details
-            </p>
-          </div>
-        </motion.div>
+                {/* Company Info */}
+                <div style={{ textAlign: "center", marginBottom: "16px" }}>
+                  <h3
+                    style={{
+                      color: scheme.text,
+                      fontSize: "24px",
+                      fontWeight: "bold",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    {exp.name}
+                  </h3>
+                  <p
+                    style={{
+                      color: scheme.border,
+                      fontSize: "18px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {exp.title}
+                  </p>
+                </div>
 
-        {/* Experience Stats */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-4xl mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.div 
-            className="text-center p-6 backdrop-blur-sm border rounded-xl bg-transparent"
-            style={{
-              borderColor: 'rgba(10, 60, 54, 0.2)'
-            }}
-            variants={itemVariants}
-          >
-            <div className="text-3xl font-bold mb-2" style={{ color: '#0A3C36' }}>{experiences.length}+</div>
-            <div className="text-secondary text-sm">Professional Experiences</div>
-          </motion.div>
-          
-          <motion.div 
-            className="text-center p-6 backdrop-blur-sm border rounded-xl bg-transparent"
-            style={{
-              borderColor: 'rgba(222, 138, 59, 0.2)'
-            }}
-            variants={itemVariants}
-          >
-            <div className="text-3xl font-bold mb-2" style={{ color: '#DE8A3B' }}>5+</div>
-            <div className="text-secondary text-sm">Years of Learning</div>
-          </motion.div>
-          
-          <motion.div 
-            className="text-center p-6 backdrop-blur-sm border rounded-xl bg-transparent"
-            style={{
-              borderColor: 'rgba(199, 121, 174, 0.2)'
-            }}
-            variants={itemVariants}
-          >
-            <div className="text-3xl font-bold mb-2" style={{ color: '#C779AE' }}>10+</div>
-            <div className="text-secondary text-sm">Technologies Mastered</div>
-          </motion.div>
-        </motion.div>
+                {/* Date Badge */}
+                <div
+                  style={{
+                    backgroundColor:
+                      scheme.background === "#2a3441" ? "#1f2937" : "#f5e6d3",
+                    border: `3px solid ${scheme.accent}`,
+                    borderRadius: "8px",
+                    color: scheme.accent,
+                    boxShadow: `4px 4px 0 ${scheme.accent}`,
+                    fontFamily: '"Roboto Mono", "Courier New", monospace',
+                    fontWeight: "bold",
+                    padding: "8px 16px",
+                    fontSize: "14px",
+                    margin: "0 auto 16px",
+                    width: "fit-content",
+                  }}
+                >
+                  {exp.joined} - {exp.end}
+                </div>
+
+                {/* Description */}
+                <div
+                  style={{
+                    padding: "12px 16px",
+                    fontSize: "14px",
+                    backgroundColor:
+                      scheme.background === "#fee1c7" ? "#f5e6d3" : "#1f2937",
+                    color: scheme.text,
+                    border: `3px solid ${scheme.border}`,
+                    boxShadow: `4px 4px 0 ${scheme.border}`,
+                    borderRadius: "8px",
+                    marginBottom: "16px",
+                    minHeight: "80px",
+                    lineHeight: "1.5",
+                    fontFamily: '"Roboto Mono", "Courier New", monospace',
+                  }}
+                >
+                  {exp.bio}
+                </div>
+
+                {/* Technologies */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "8px",
+                    justifyContent: "center",
+                  }}
+                >
+                  {exp.technologies?.map((tech, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        backgroundColor: scheme.accent,
+                        border: `3px solid ${scheme.accent}`,
+                        borderRadius: "8px",
+                        color: "#2a3441",
+                        boxShadow: `4px 4px 0 ${scheme.accent}`,
+                        fontFamily: '"Roboto Mono", "Courier New", monospace',
+                        fontWeight: "bold",
+                        padding: "6px 12px",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                        transition: "all 0.1s ease-in",
+                      }}
+                      onMouseDown={(e) => {
+                        e.currentTarget.style.transform = "translate(2px, 2px)"
+                        e.currentTarget.style.boxShadow = `2px 2px 0 ${scheme.accent}`
+                      }}
+                      onMouseUp={(e) => {
+                        e.currentTarget.style.transform = "none"
+                        e.currentTarget.style.boxShadow = `4px 4px 0 ${scheme.accent}`
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "transparent"
+                        e.currentTarget.style.color = scheme.accent
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = scheme.accent
+                        e.currentTarget.style.color = "#2a3441"
+                      }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  )
+}
+
+export default Experience
