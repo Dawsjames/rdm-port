@@ -78,7 +78,9 @@ const Contact = () => {
         />
 
         {/* Contact Form - Now Full Width */}
-        <div style={{ maxWidth: "800px", margin: "0 auto", marginBottom: "60px" }}>
+        <div
+          style={{ maxWidth: "800px", margin: "0 auto", marginBottom: "60px" }}
+        >
           <PixelContainer variant="dark" glowColor="rgba(255, 107, 71, 0.3)">
             <h2
               style={{
@@ -170,7 +172,7 @@ const Contact = () => {
           >
             Connect With Me 🌐
           </h3>
-          
+
           <div
             style={{
               display: "flex",
@@ -185,28 +187,6 @@ const Contact = () => {
               <SocialButton key={index} {...link} />
             ))}
           </div>
-        </div>
-
-        {/* Response Time Info */}
-        <div
-          style={{
-            marginTop: "40px",
-            textAlign: "center",
-            padding: "20px",
-            backgroundColor: COLORS.lightVariant,
-            border: `2px solid ${COLORS.teal}`,
-            borderRadius: "8px",
-          }}
-        >
-          <p
-            style={{
-              color: COLORS.dark,
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            ⚡ Quick Response Time: Usually within 24 hours
-          </p>
         </div>
       </div>
     </div>
@@ -268,6 +248,9 @@ const SocialButton = ({ name, url, icon, color }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        justifyContent: "center",
+        width: "100px",
+        height: "100px",
         gap: "8px",
         padding: "12px",
         backgroundColor: "transparent",
