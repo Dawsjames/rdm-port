@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { PixelSectionTitle } from "../../components/PixelatedComponents"
 
 const Projects = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -73,8 +74,16 @@ const Projects = () => {
         padding: "40px 20px",
         backgroundColor: "#2a3441",
         overflow: "hidden",
+        position: "relative",
       }}
     >
+      {/* Title (Top-Left) via shared component */}
+      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+        <div style={{ marginBottom: "48px", textAlign: "left" }}>
+          <PixelSectionTitle title="PROJECTS" />
+        </div>
+      </div>
+
       {/* Animated Background Elements - Outline Only */}
       <div
         style={{
@@ -137,34 +146,6 @@ const Projects = () => {
           zIndex: 10,
         }}
       >
-        {/* Title */}
-        <div style={{ textAlign: "center", marginBottom: "64px" }}>
-          <h1
-            style={{
-              fontSize: "48px",
-              fontWeight: "bold",
-              color: "#ff8c42",
-              letterSpacing: "4px",
-              marginBottom: "20px",
-              fontFamily: '"Roboto Mono", "Courier New", monospace',
-              textShadow: "0 0 30px rgba(255, 140, 66, 0.4)",
-            }}
-          >
-            PROJECTS
-          </h1>
-          <div
-            style={{
-              width: "200px",
-              height: "4px",
-              margin: "0 auto",
-              backgroundColor: "transparent",
-              border: "2px solid #ff8c42",
-              borderRadius: "4px",
-              boxShadow: "0 0 20px rgba(255, 140, 66, 0.4)",
-            }}
-          />
-        </div>
-
         {/* ORIGINAL CAROUSEL LAYOUT - PRESERVED */}
         <div
           style={{
@@ -193,22 +174,16 @@ const Projects = () => {
               const position = index - currentIndex
               const isActive = index === currentIndex
 
-              // Fixed positioning algorithm for symmetrical card distribution
               const getCardTransform = () => {
-                if (position === 0) {
+                if (position === 0)
                   return "scale(1) translateX(0) translateZ(0)"
-                }
-
-                const baseSpacing = 300 // Consistent spacing between cards
+                const baseSpacing = 300
                 const scaleReduction = 0.15
                 const depthSpacing = 20
-
                 const absPosition = Math.abs(position)
                 const scale = Math.max(0.6, 1 - absPosition * scaleReduction)
-                // Fixed: Use consistent spacing regardless of position
                 const translateX = position * baseSpacing
                 const translateZ = -absPosition * depthSpacing
-
                 return `scale(${scale}) translateX(${translateX}px) translateZ(${translateZ}px)`
               }
 
@@ -456,7 +431,7 @@ const Projects = () => {
   )
 }
 
-// Project Card Component with Pixelated Design
+// Project Card Component with Pixelated Design (unchanged)
 const ProjectCard = ({ data, position, isActive, index }) => {
   const colors = [
     { bg: "#2a3441", border: "#ff6b47", text: "#fee1c7", accent: "#ff6b47" },
@@ -553,11 +528,7 @@ const ProjectCard = ({ data, position, isActive, index }) => {
           position: "relative",
         }}
       >
-        <div
-          style={{
-            flex: 1,
-          }}
-        >
+        <div style={{ flex: 1 }}>
           <h3
             style={{
               color: colorScheme.text,
@@ -587,13 +558,7 @@ const ProjectCard = ({ data, position, isActive, index }) => {
         {/* Tech Stack Tags */}
         {data.tags && (
           <div style={{ marginBottom: "16px" }}>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "8px",
-              }}
-            >
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
               {data.tags.slice(0, isActive ? 4 : 3).map((tag, i) => (
                 <span
                   key={i}
@@ -618,12 +583,7 @@ const ProjectCard = ({ data, position, isActive, index }) => {
 
         {/* Action Buttons - Only show on active item */}
         {isActive && (
-          <div
-            style={{
-              display: "flex",
-              gap: "12px",
-            }}
-          >
+          <div style={{ display: "flex", gap: "12px" }}>
             {data.source_code_link && (
               <button
                 onClick={(e) => {
@@ -653,13 +613,6 @@ const ProjectCard = ({ data, position, isActive, index }) => {
                 onMouseUp={(e) => {
                   e.currentTarget.style.transform = "none"
                   e.currentTarget.style.boxShadow = `4px 4px 0 ${colorScheme.border}`
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    colorScheme.bg === "#2a3441" ? "#1f2937" : "#f5e6d3"
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent"
                 }}
               >
                 <svg
@@ -706,13 +659,6 @@ const ProjectCard = ({ data, position, isActive, index }) => {
                   e.currentTarget.style.transform = "none"
                   e.currentTarget.style.boxShadow = `4px 4px 0 ${colorScheme.accent}`
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    colorScheme.bg === "#2a3441" ? "#1f2937" : "#f5e6d3"
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent"
-                }}
               >
                 <svg
                   style={{ width: "16px", height: "16px" }}
@@ -733,6 +679,17 @@ const ProjectCard = ({ data, position, isActive, index }) => {
           </div>
         )}
       </div>
+
+      <style>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
     </div>
   )
 }

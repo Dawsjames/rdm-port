@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { PixelSectionTitle } from "../../components/PixelatedComponents"
 
 const About = () => {
   const [activeCard, setActiveCard] = useState(0)
@@ -116,45 +117,11 @@ const About = () => {
           zIndex: 10,
         }}
       >
-        {/* Title */}
-        <div style={{ textAlign: "center", marginBottom: "60px" }}>
-          <h1
-            style={{
-              fontSize: "48px",
-              fontWeight: "bold",
-              color: "#ff8c42",
-              letterSpacing: "4px",
-              marginBottom: "20px",
-              fontFamily: '"Roboto Mono", "Courier New", monospace',
-              textShadow: "0 0 30px rgba(255, 140, 66, 0.4)",
-            }}
-          >
-            ABOUT
-          </h1>
-          <p
-            style={{
-              color: "#fee1c7",
-              fontSize: "18px",
-              opacity: 0.8,
-              marginTop: "16px",
-              fontFamily: '"Roboto Mono", "Courier New", monospace',
-              maxWidth: "600px",
-              margin: "16px auto 0",
-            }}
-          >
-            Discover my journey, skills, and passion for creating digital
-            experiences
-          </p>
-          <div
-            style={{
-              width: "200px",
-              height: "4px",
-              margin: "20px auto 0",
-              backgroundColor: "transparent",
-              border: "2px solid #ff8c42",
-              borderRadius: "4px",
-              boxShadow: "0 0 20px rgba(255, 140, 66, 0.4)",
-            }}
+        {/* Title (Top-Left) via shared component */}
+        <div style={{ marginBottom: "40px", textAlign: "left" }}>
+          <PixelSectionTitle
+            title="ABOUT"
+            subtitle="Discover my journey, skills, and passion for creating digital experiences"
           />
         </div>
 
@@ -167,7 +134,7 @@ const About = () => {
             marginBottom: "80px",
           }}
         >
-          {/* Left Column - Education (Moved from bottom) */}
+          {/* Left Column - Education */}
           <div
             style={{
               backgroundColor: "#fee1c7",
@@ -344,13 +311,49 @@ const About = () => {
             {/* Floating Tech Logos */}
             <div style={{ position: "relative", height: "300px" }}>
               {[
-                { name: "React", x: "10%", y: "20%", delay: "0s", color: "#61dafb" },
-                { name: "Node.js", x: "70%", y: "15%", delay: "0.5s", color: "#339933" },
-                { name: "Three.js", x: "20%", y: "60%", delay: "1s", color: "#000000" },
-                { name: "MongoDB", x: "80%", y: "70%", delay: "1.5s", color: "#47a248" },
-                { name: "TypeScript", x: "50%", y: "40%", delay: "2s", color: "#3178c6" },
-                { name: "AWS", x: "30%", y: "80%", delay: "2.5s", color: "#ff9900" },
-              ].map((tech, index) => (
+                {
+                  name: "React",
+                  x: "10%",
+                  y: "20%",
+                  delay: "0s",
+                  color: "#61dafb",
+                },
+                {
+                  name: "Node.js",
+                  x: "70%",
+                  y: "15%",
+                  delay: "0.5s",
+                  color: "#339933",
+                },
+                {
+                  name: "Three.js",
+                  x: "20%",
+                  y: "60%",
+                  delay: "1s",
+                  color: "#000000",
+                },
+                {
+                  name: "MongoDB",
+                  x: "80%",
+                  y: "70%",
+                  delay: "1.5s",
+                  color: "#47a248",
+                },
+                {
+                  name: "TypeScript",
+                  x: "50%",
+                  y: "40%",
+                  delay: "2s",
+                  color: "#3178c6",
+                },
+                {
+                  name: "AWS",
+                  x: "30%",
+                  y: "80%",
+                  delay: "2.5s",
+                  color: "#ff9900",
+                },
+              ].map((tech) => (
                 <div
                   key={tech.name}
                   style={{
@@ -372,7 +375,8 @@ const About = () => {
                     transform: "translate(-50%, -50%)",
                   }}
                   onMouseDown={(e) => {
-                    e.currentTarget.style.transform = "translate(-50%, -50%) translate(2px, 2px)"
+                    e.currentTarget.style.transform =
+                      "translate(-50%, -50%) translate(2px, 2px)"
                     e.currentTarget.style.boxShadow = "2px 2px 0 #4a9b8e"
                   }}
                   onMouseUp={(e) => {

@@ -71,13 +71,16 @@ const Contact = () => {
         padding: "40px 20px",
       }}
     >
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <PixelSectionTitle
-          title="CONTACT"
-          subtitle="Let's build something amazing together"
-        />
+      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+        {/* Title (Top-Left) via shared component */}
+        <div style={{ marginBottom: "24px", textAlign: "left" }}>
+          <PixelSectionTitle
+            title="CONTACT"
+            subtitle="Let's build something amazing together"
+          />
+        </div>
 
-        {/* Contact Form - Now Full Width */}
+        {/* Contact Form - Full Width */}
         <div
           style={{ maxWidth: "800px", margin: "0 auto", marginBottom: "60px" }}
         >
@@ -159,7 +162,7 @@ const Contact = () => {
           </PixelContainer>
         </div>
 
-        {/* Social Links - Moved to Bottom */}
+        {/* Social Links */}
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
           <h3
             style={{

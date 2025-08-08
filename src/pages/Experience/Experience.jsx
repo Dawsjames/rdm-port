@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { COLORS } from "/home/dwsn/projects/rdm-port/src/components/PixelatedComponents.jsx"
+import { PixelSectionTitle, COLORS } from "../../components/PixelatedComponents"
 
 const Experience = () => {
   const [activeCard, setActiveCard] = useState(0)
@@ -67,33 +67,10 @@ const Experience = () => {
         fontFamily: '"Roboto Mono", "Courier New", monospace',
       }}
     >
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        {/* Title with Orange Glow */}
-        <div style={{ textAlign: "center", marginBottom: "60px" }}>
-          <h1
-            style={{
-              fontSize: "48px",
-              fontWeight: "bold",
-              color: "#ff8c42",
-              letterSpacing: "4px",
-              marginBottom: "20px",
-              fontFamily: '"Roboto Mono", "Courier New", monospace',
-              textShadow: "0 0 30px rgba(255, 140, 66, 0.4)",
-            }}
-          >
-            EXPERIENCE
-          </h1>
-          <div
-            style={{
-              width: "200px",
-              height: "4px",
-              margin: "0 auto",
-              backgroundColor: "transparent",
-              border: "2px solid #ff8c42",
-              borderRadius: "4px",
-              boxShadow: "0 0 20px rgba(255, 140, 66, 0.4)",
-            }}
-          />
+      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+        {/* Title (Top-Left) via shared component */}
+        <div style={{ marginBottom: "40px", textAlign: "left" }}>
+          <PixelSectionTitle title="EXPERIENCE" />
         </div>
 
         {/* Experience Cards - ORIGINAL LAYOUT */}
@@ -105,7 +82,7 @@ const Experience = () => {
             marginBottom: "48px",
           }}
         >
-          {experiences.map((exp, index) => {
+          {experiences.map((exp) => {
             const scheme = exp.colorScheme
             return (
               <div

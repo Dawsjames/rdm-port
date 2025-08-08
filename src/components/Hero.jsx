@@ -1,42 +1,39 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import Navbar from "./Navbar";
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 
 const Hero = () => {
-  const [scrollY, setScrollY] = useState(0);
+  const [scrollY, setScrollY] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
+      setScrollY(window.scrollY)
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const scrollToAbout = () => {
-    const aboutSection = document.getElementById("about");
+    const aboutSection = document.getElementById("about")
     if (aboutSection) {
-      aboutSection.scrollIntoView({ 
+      aboutSection.scrollIntoView({
         behavior: "smooth",
-        block: "start"
-      });
+        block: "start",
+      })
     }
-  };
+  }
 
   return (
     <section id="hero" className="relative w-full h-screen mx-auto">
-      {/* Navigation */}
-      <Navbar />
-
       {/* Hero Content */}
       <div className="absolute inset-0 top-[120px] max-w-7xl mx-auto px-6 flex flex-row items-start gap-5 z-10">
         <div className="flex flex-col justify-center items-center mt-5">
           <div className="w-5 h-5 rounded-full bg-[#ff8c42]" />
-          <div 
+          <div
             className="w-1 sm:h-80 h-40"
             style={{
-              background: "linear-gradient(180deg, #ff8c42 0%, transparent 100%)"
+              background:
+                "linear-gradient(180deg, #ff8c42 0%, transparent 100%)",
             }}
           />
         </div>
@@ -49,7 +46,7 @@ const Hero = () => {
             transition={{ duration: 1 }}
             style={{
               fontFamily: '"Roboto Mono", "Courier New", monospace',
-              textShadow: "0 0 30px rgba(255, 140, 66, 0.4)"
+              textShadow: "0 0 30px rgba(255, 140, 66, 0.4)",
             }}
           >
             Hi, I'm <span style={{ color: "#ff8c42" }}>Dawson James</span>
@@ -62,7 +59,7 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.2 }}
             style={{
               fontFamily: '"Roboto Mono", "Courier New", monospace',
-              opacity: 0.9
+              opacity: 0.9,
             }}
           >
             I develop 3D visuals, user <br className="sm:block hidden" />
@@ -79,10 +76,10 @@ const Hero = () => {
             <button
               onClick={scrollToAbout}
               style={{
-                backgroundColor: "#ff8c42",
+                backgroundColor: "transparent",
                 border: "3px solid #ff8c42",
                 borderRadius: "12px",
-                color: "#2a3441",
+                color: "#4a9b8e",
                 padding: "16px 32px",
                 fontSize: "18px",
                 fontWeight: "bold",
@@ -103,13 +100,11 @@ const Hero = () => {
                 e.currentTarget.style.boxShadow = "6px 6px 0 #ff8c42"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent"
                 e.currentTarget.style.color = "#ff8c42"
                 e.currentTarget.style.boxShadow = "8px 8px 0 #ff8c42"
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#ff8c42"
-                e.currentTarget.style.color = "#2a3441"
+                e.currentTarget.style.color = "#4a9b8e"
                 e.currentTarget.style.boxShadow = "6px 6px 0 #ff8c42"
               }}
             >
@@ -136,7 +131,7 @@ const Hero = () => {
             alignItems: "flex-start",
             padding: "8px",
             transition: "all 0.3s ease",
-            boxShadow: "0 0 20px rgba(74, 155, 142, 0.3)"
+            boxShadow: "0 0 20px rgba(74, 155, 142, 0.3)",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.borderColor = "#ff8c42"
@@ -161,13 +156,13 @@ const Hero = () => {
               height: "12px",
               borderRadius: "50%",
               backgroundColor: "#4a9b8e",
-              marginBottom: "4px"
+              marginBottom: "4px",
             }}
           />
         </button>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Hero;
+export default Hero
