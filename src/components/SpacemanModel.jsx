@@ -121,7 +121,7 @@ const SpacemanModel = ({
         pointerEvents: "none",
         userSelect: "none",
         touchAction: "none",
-        zIndex: 999, // Always on top of sections (which are z-30)
+        zIndex: 50,
         WebkitUserSelect: "none",
         MozUserSelect: "none",
         msUserSelect: "none",
